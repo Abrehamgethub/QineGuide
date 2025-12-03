@@ -1,0 +1,45 @@
+# Render Blueprint - Deploy both frontend and backend
+# Deploy with: https://dashboard.render.com/blueprints
+
+services:
+  # Backend API Service
+  - type: web
+    name: tenaai-backend
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: CORS_ORIGIN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_BASE64
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        value: tenaai-9a62c
+    healthCheckPath: /health
+
+  # Frontend Static Site
+  - type: web
+    name: tenaai-frontend
+    runtime: static
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
