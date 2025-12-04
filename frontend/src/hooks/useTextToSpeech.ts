@@ -1,10 +1,15 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
+
+// Languages that don't have good TTS support in browsers
+const UNSUPPORTED_TTS_LANGUAGES = ['am', 'om'];
 
 interface UseTextToSpeechReturn {
   speak: (text: string) => void;
   stop: () => void;
   isSpeaking: boolean;
   isSupported: boolean;
+  isLanguageSupported: boolean;
+  unsupportedMessage: string | null;
   voices: SpeechSynthesisVoice[];
   setVoice: (voice: SpeechSynthesisVoice) => void;
   currentVoice: SpeechSynthesisVoice | null;
@@ -16,6 +21,22 @@ export const useTextToSpeech = (lang: string = 'en-US'): UseTextToSpeechReturn =
   const [currentVoice, setCurrentVoice] = useState<SpeechSynthesisVoice | null>(null);
   
   const isSupported = typeof window !== 'undefined' && 'speechSynthesis' in window;
+  
+  // Check if the current language has TTS support
+  const isLanguageSupported = useMemo(() => {
+    return !UNSUPPORTED_TTS_LANGUAGES.includes(lang);
+  }, [lang]);
+
+  // Message to show when language is not supported
+  const unsupportedMessage = useMemo(() => {
+    if (lang === 'am') {
+      return 'Voice is not available for Amharic. The text response is shown above.';
+    }
+    if (lang === 'om') {
+      return 'Voice is not available for Afan Oromo. The text response is shown above.';
+    }
+    return null;
+  }, [lang]);
 
   // Load available voices
   useEffect(() => {
@@ -81,7 +102,8 @@ export const useTextToSpeech = (lang: string = 'en-US'): UseTextToSpeechReturn =
   }, [isSupported]);
 
   const speak = useCallback((text: string) => {
-    if (!isSupported || !text) return;
+    // Don't speak if not supported or language not supported
+    if (!isSupported || !text || !isLanguageSupported) return;
 
     // Cancel any ongoing speech
     window.speechSynthesis.cancel();
@@ -92,6 +114,8 @@ export const useTextToSpeech = (lang: string = 'en-US'): UseTextToSpeechReturn =
       utterance.voice = currentVoice;
     }
     
+    // Use English voice as default for better quality
+    utterance.lang = 'en-US';
     utterance.rate = 0.9;
     utterance.pitch = 1;
     utterance.volume = 1;
@@ -101,7 +125,7 @@ export const useTextToSpeech = (lang: string = 'en-US'): UseTextToSpeechReturn =
     utterance.onerror = () => setIsSpeaking(false);
 
     window.speechSynthesis.speak(utterance);
-  }, [isSupported, currentVoice]);
+  }, [isSupported, isLanguageSupported, currentVoice]);
 
   const stop = useCallback(() => {
     if (!isSupported) return;
@@ -118,6 +142,8 @@ export const useTextToSpeech = (lang: string = 'en-US'): UseTextToSpeechReturn =
     stop,
     isSpeaking,
     isSupported,
+    isLanguageSupported,
+    unsupportedMessage,
     voices,
     setVoice,
     currentVoice,

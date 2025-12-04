@@ -45,6 +45,8 @@ const Tutor = () => {
     stop: stopSpeaking,
     isSpeaking,
     isSupported: ttsSupported,
+    isLanguageSupported: ttsLanguageSupported,
+    unsupportedMessage: ttsUnsupportedMessage,
   } = useTextToSpeech(language);
 
   const location = useLocation();
@@ -96,8 +98,8 @@ const Tutor = () => {
           setHistoryId(response.data.historyId);
         }
 
-        // Speak the response if voice mode is enabled
-        if (voiceMode && ttsSupported) {
+        // Speak the response if voice mode is enabled and language is supported
+        if (voiceMode && ttsSupported && ttsLanguageSupported) {
           speak(response.data.response);
         }
       }
@@ -201,8 +203,8 @@ const Tutor = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {/* Voice Mode Toggle */}
-            {ttsSupported && (
+            {/* Voice Mode Toggle - Only show for supported languages */}
+            {ttsSupported && ttsLanguageSupported && (
               <button
                 onClick={() => {
                   if (isSpeaking) stopSpeaking();
@@ -217,6 +219,13 @@ const Tutor = () => {
                 {voiceMode ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
                 Voice {voiceMode ? 'On' : 'Off'}
               </button>
+            )}
+            {/* Show message when language doesn't support TTS */}
+            {ttsSupported && !ttsLanguageSupported && ttsUnsupportedMessage && (
+              <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                <VolumeX className="h-4 w-4" />
+                <span className="hidden sm:inline">Voice not available</span>
+              </div>
             )}
             {messages.length > 0 && (
               <button
