@@ -65,10 +65,31 @@ const ChatHistorySidebar = ({
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDate = (dateString: string | { _seconds?: number; seconds?: number } | undefined | null) => {
+    if (!dateString) return 'Just now';
+    
+    let date: Date;
+    
+    // Handle Firestore Timestamp objects
+    if (typeof dateString === 'object') {
+      const seconds = dateString._seconds || dateString.seconds;
+      if (seconds) {
+        date = new Date(seconds * 1000);
+      } else {
+        return 'Just now';
+      }
+    } else {
+      date = new Date(dateString);
+    }
+    
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      return 'Just now';
+    }
+    
     const now = new Date();
-    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
     
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
@@ -154,7 +175,7 @@ const ChatHistorySidebar = ({
                       {truncateText(history.lastMessage || '', 40)}
                     </p>
                     <p className="text-xs text-gray-400 mt-1">
-                      {formatDate(history.updatedAt)}
+                      {formatDate(history.updatedAt as unknown as string)}
                     </p>
                   </div>
                   {loadingHistory === history.historyId && (

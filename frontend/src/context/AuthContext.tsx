@@ -79,11 +79,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const loginWithGoogle = async () => {
-    // Use redirect on mobile for better compatibility
-    if (isMobile()) {
-      await signInWithRedirect(auth, googleProvider);
-    } else {
-      await signInWithPopup(auth, googleProvider);
+    try {
+      // Use redirect on mobile for better compatibility
+      if (isMobile()) {
+        await signInWithRedirect(auth, googleProvider);
+      } else {
+        const result = await signInWithPopup(auth, googleProvider);
+        console.log('Google sign-in successful:', result.user.email);
+      }
+    } catch (error: unknown) {
+      const err = error as { code?: string; message?: string };
+      console.error('Google sign-in error:', err.code, err.message);
+      throw error;
     }
   };
 

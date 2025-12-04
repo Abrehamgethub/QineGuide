@@ -24,13 +24,18 @@ const Login = () => {
       await login(email, password);
       navigate(from, { replace: true });
     } catch (err: unknown) {
+      console.error('Login error:', err);
       const error = err as { code?: string; message?: string };
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         setError('Invalid email or password');
+      } else if (error.code === 'auth/invalid-credential') {
+        setError('Invalid email or password');
       } else if (error.code === 'auth/too-many-requests') {
         setError('Too many attempts. Please try again later.');
+      } else if (error.code === 'auth/invalid-api-key') {
+        setError('Configuration error. Please contact support.');
       } else {
-        setError('Failed to sign in. Please try again.');
+        setError(error.message || 'Failed to sign in. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -44,8 +49,16 @@ const Login = () => {
     try {
       await loginWithGoogle();
       navigate(from, { replace: true });
-    } catch (err) {
-      setError('Failed to sign in with Google. Please try again.');
+    } catch (err: unknown) {
+      console.error('Google login error:', err);
+      const error = err as { code?: string; message?: string };
+      if (error.code === 'auth/popup-closed-by-user') {
+        setError('Sign-in was cancelled.');
+      } else if (error.code === 'auth/popup-blocked') {
+        setError('Pop-up was blocked. Please allow pop-ups for this site.');
+      } else {
+        setError(error.message || 'Failed to sign in with Google. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
