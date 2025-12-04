@@ -6,6 +6,38 @@ const CLOUD_TTS_LANGUAGES = ['am'];
 // Languages not supported at all (Oromo has no TTS support yet)
 const UNSUPPORTED_LANGUAGES = ['om'];
 
+/**
+ * Clean text for TTS - remove markdown and special characters
+ */
+const cleanTextForSpeech = (text: string): string => {
+  return text
+    // Remove markdown bold/italic markers
+    .replace(/\*\*\*/g, '')
+    .replace(/\*\*/g, '')
+    .replace(/\*/g, '')
+    .replace(/___/g, '')
+    .replace(/__/g, '')
+    .replace(/_/g, ' ')
+    // Remove markdown headers
+    .replace(/#{1,6}\s*/g, '')
+    // Remove markdown links [text](url) -> text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    // Remove markdown images
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '')
+    // Remove code blocks
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`([^`]+)`/g, '$1')
+    // Remove bullet points and list markers
+    .replace(/^[\s]*[-•]\s*/gm, '')
+    .replace(/^[\s]*\d+\.\s*/gm, '')
+    // Remove extra whitespace
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/\s{2,}/g, ' ')
+    // Remove special characters that shouldn't be spoken
+    .replace(/[<>{}[\]|\\^~]/g, '')
+    .trim();
+};
+
 interface UseTextToSpeechReturn {
   speak: (text: string) => void;
   stop: () => void;
@@ -129,6 +161,10 @@ export const useTextToSpeech = (lang: string = 'en-US'): UseTextToSpeechReturn =
     // Don't speak if not supported or language not supported
     if (!text || !isLanguageSupported) return;
 
+    // Clean the text - remove markdown and special characters
+    const cleanedText = cleanTextForSpeech(text);
+    if (!cleanedText) return;
+
     // Stop any ongoing speech first
     if (audioRef.current) {
       audioRef.current.pause();
@@ -143,7 +179,7 @@ export const useTextToSpeech = (lang: string = 'en-US'): UseTextToSpeechReturn =
       try {
         setIsSpeaking(true);
         console.log('Calling Cloud TTS for language:', lang);
-        const response = await ttsApi.synthesize(text, lang as 'am' | 'en' | 'om');
+        const response = await ttsApi.synthesize(cleanedText, lang as 'am' | 'en' | 'om');
         console.log('TTS response:', response.success, !!response.data?.audioContent);
         
         if (response.success && response.data?.audioContent) {
@@ -179,7 +215,7 @@ export const useTextToSpeech = (lang: string = 'en-US'): UseTextToSpeechReturn =
     // Use browser TTS for English
     if (!browserTTSSupported) return;
 
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(cleanedText);
     
     if (currentVoice) {
       utterance.voice = currentVoice;

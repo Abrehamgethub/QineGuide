@@ -68,6 +68,14 @@ Your explanation should:
 4. Include a practical application or real-world use case
 5. End with a quick summary or key takeaway
 
+IMPORTANT FORMATTING RULES:
+- Do NOT use markdown formatting (no *, **, #, ##, etc.)
+- Do NOT use bullet points with symbols like -, •, or *
+- Write in clean, flowing paragraphs
+- Use numbers (1, 2, 3) only if listing steps, written naturally in sentences
+- Keep the text clean and readable as if speaking to someone
+- The response will be read aloud, so avoid any special characters
+
 Keep the tone friendly, encouraging, and patient. Remember you're speaking to young learners who may be new to this topic.
 `;
   },
