@@ -72,17 +72,57 @@ Keep the tone friendly, encouraging, and patient. Remember you're speaking to yo
 `;
   },
 
-  // Opportunities Recommendation
+  // Opportunities Recommendation - Uses ONLY verified, real URLs
   opportunities: (careerGoal: string, skillLevel?: string, category?: string) => `
 You are TenaAI, helping Ethiopian youth find learning and career opportunities.
-Generate a list of 5 relevant opportunities for someone learning ${careerGoal}.
+Generate a list of 5-8 relevant opportunities for someone learning ${careerGoal}.
 ${skillLevel ? `Skill level: ${skillLevel}` : ''}
-${category ? `Focus on: ${category}` : 'Include a mix of internships, scholarships, and online programs.'}
+${category ? `Focus on: ${category}` : 'Include a mix of courses, scholarships, and programs.'}
+
+IMPORTANT: You MUST only use URLs from this list of verified platforms. DO NOT make up URLs.
+
+VERIFIED PLATFORMS AND THEIR REAL URLs:
+Courses:
+- Coursera: https://www.coursera.org/search?query=[topic]
+- edX: https://www.edx.org/search?q=[topic]
+- FreeCodeCamp: https://www.freecodecamp.org/learn
+- Khan Academy: https://www.khanacademy.org
+- Udacity: https://www.udacity.com/courses/all
+- MIT OpenCourseWare: https://ocw.mit.edu/search/
+- Google Career Certificates: https://grow.google/certificates/
+- Microsoft Learn: https://learn.microsoft.com/en-us/training/
+- AWS Training: https://aws.amazon.com/training/
+- IBM Skills: https://www.ibm.com/training/
+
+Scholarships/Fellowships:
+- Mastercard Foundation Scholars: https://mastercardfdn.org/all/scholars/
+- AAUW International Fellowships: https://www.aauw.org/resources/programs/fellowships-grants/
+- Chevening Scholarships: https://www.chevening.org/scholarships/
+- DAAD Scholarships: https://www.daad.de/en/study-and-research-in-germany/scholarships/
+- Fulbright Program: https://foreign.fulbrightonline.org/
+- Commonwealth Scholarships: https://cscuk.fcdo.gov.uk/scholarships/
+- Africa Leadership University: https://www.alueducation.com/scholarships/
+
+Internships/Jobs:
+- Google Careers: https://careers.google.com/
+- Microsoft Careers: https://careers.microsoft.com/
+- Remote OK: https://remoteok.com/
+- AngelList: https://angel.co/jobs
+- LinkedIn Jobs: https://www.linkedin.com/jobs/
+- Indeed: https://www.indeed.com/
+- Andela: https://andela.com/careers/
+- Gebeya: https://gebeya.com/
+
+Bootcamps:
+- ALX Africa: https://www.alxafrica.com/
+- African Leadership Academy: https://www.africanleadershipacademy.org/
+- 10 Academy: https://www.10academy.org/
+- Moringa School: https://moringaschool.com/
 
 For each opportunity, provide:
-- Title of the program/opportunity
+- Title of the program/opportunity (be specific)
 - Provider/Organization name
-- URL (use real, verified URLs when possible, or indicate "Search for latest")
+- URL (MUST be from the verified list above - replace [topic] with actual search term)
 - Category (internship, scholarship, course, bootcamp, fellowship)
 - Required skill level (beginner, intermediate, advanced)
 - A one-line description
@@ -91,7 +131,7 @@ Prioritize:
 - Opportunities open to African/Ethiopian applicants
 - Remote-friendly options
 - Free or funded programs
-- Programs with good track records
+- Currently active programs
 
 Respond in valid JSON format:
 {
@@ -99,7 +139,7 @@ Respond in valid JSON format:
     {
       "title": "Opportunity Title",
       "provider": "Organization Name",
-      "url": "https://example.com",
+      "url": "https://verified-url.com",
       "category": "scholarship",
       "skillLevel": "beginner",
       "description": "One-line description of the opportunity"

@@ -86,14 +86,39 @@ export const tutorApi = {
   },
 
   /**
-   * Get chat history
+   * Get all chat histories (list)
    */
-  getHistory: async (historyId?: string): Promise<ApiResponse<unknown>> => {
-    const url = historyId ? `/explain/history/${historyId}` : '/explain/history';
-    const response = await apiClient.get(url);
+  getAllHistories: async (): Promise<ApiResponse<ChatHistorySummary[]>> => {
+    const response = await apiClient.get('/explain/history');
+    return response.data;
+  },
+
+  /**
+   * Get specific chat history with messages
+   */
+  getHistory: async (historyId: string): Promise<ApiResponse<ChatMessage[]>> => {
+    const response = await apiClient.get(`/explain/history/${historyId}`);
     return response.data;
   },
 };
+
+// Chat history types
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  language: string;
+  timestamp: string;
+}
+
+export interface ChatHistorySummary {
+  historyId: string;
+  title: string;
+  lastMessage: string;
+  messageCount: number;
+  updatedAt: string;
+  createdAt: string;
+}
 
 // ==================== Opportunities API ====================
 
