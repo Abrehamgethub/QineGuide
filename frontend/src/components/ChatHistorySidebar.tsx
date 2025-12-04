@@ -48,15 +48,35 @@ const ChatHistorySidebar = ({
   const handleSelectHistory = async (historyId: string) => {
     try {
       setLoadingHistory(historyId);
+      console.log('Loading history:', historyId);
       const response = await tutorApi.getHistory(historyId);
+      console.log('History response:', response);
+      
       if (response.success && response.data) {
-        const messages = response.data.map(msg => ({
-          id: msg.id,
-          role: msg.role,
-          content: msg.content,
-          timestamp: msg.timestamp
-        }));
+        const messages = response.data.map((msg, index) => {
+          // Handle Firestore timestamp format
+          let timestamp = msg.timestamp;
+          if (typeof timestamp === 'object' && timestamp !== null) {
+            const ts = timestamp as { _seconds?: number; seconds?: number };
+            const seconds = ts._seconds || ts.seconds;
+            if (seconds) {
+              timestamp = new Date(seconds * 1000).toISOString();
+            } else {
+              timestamp = new Date().toISOString();
+            }
+          }
+          
+          return {
+            id: msg.id || `msg-${index}`,
+            role: msg.role,
+            content: msg.content,
+            timestamp: timestamp as string
+          };
+        });
+        console.log('Parsed messages:', messages.length);
         onSelectHistory(historyId, messages);
+      } else {
+        console.error('Failed to get history data:', response);
       }
     } catch (err) {
       console.error('Failed to load chat history:', err);

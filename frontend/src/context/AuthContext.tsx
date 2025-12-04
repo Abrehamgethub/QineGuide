@@ -48,19 +48,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for redirect result (mobile Google sign-in)
-    getRedirectResult(auth)
-      .then((result) => {
+    // Check for redirect result first (mobile Google sign-in)
+    const checkRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
         if (result?.user) {
+          console.log('Redirect sign-in successful:', result.user.email);
           setUser(result.user);
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('Redirect sign-in error:', error);
-      });
+      }
+    };
+    
+    checkRedirect();
 
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
       setLoading(false);
     });
 
@@ -80,12 +84,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const loginWithGoogle = async () => {
     try {
-      // Use redirect on mobile for better compatibility
-      if (isMobile()) {
-        await signInWithRedirect(auth, googleProvider);
-      } else {
+      // Try popup first for all devices (more reliable)
+      try {
         const result = await signInWithPopup(auth, googleProvider);
         console.log('Google sign-in successful:', result.user.email);
+        return;
+      } catch (popupError: unknown) {
+        const err = popupError as { code?: string };
+        // If popup blocked or failed on mobile, fallback to redirect
+        if (err.code === 'auth/popup-blocked' || 
+            err.code === 'auth/popup-closed-by-user' ||
+            (isMobile() && err.code === 'auth/cancelled-popup-request')) {
+          console.log('Popup failed, trying redirect...');
+          await signInWithRedirect(auth, googleProvider);
+          return;
+        }
+        throw popupError;
       }
     } catch (error: unknown) {
       const err = error as { code?: string; message?: string };
