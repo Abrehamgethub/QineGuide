@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "site": "qineguide",
     "public": "dist",
     "ignore": [
       "firebase.json",

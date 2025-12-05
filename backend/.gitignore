@@ -11,6 +11,7 @@ dist/
 # Service account (NEVER commit this)
 service-account.json
 serviceAccountKey.json
+*-firebase-adminsdk-*.json
 *.json.backup
 
 # Logs

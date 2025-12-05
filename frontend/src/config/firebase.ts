@@ -1,14 +1,14 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, browserLocalPersistence, setPersistence } from 'firebase/auth';
 
-// Firebase configuration - hardcoded for reliability
+// Firebase configuration for QineGuide
 const firebaseConfig = {
-  apiKey: 'AIzaSyA01Bp90USZuwgTw7PjM7v8x50NEpa7wq8',
-  authDomain: 'tenaai-9a62c.firebaseapp.com',
-  projectId: 'tenaai-9a62c',
-  storageBucket: 'tenaai-9a62c.appspot.com',
-  messagingSenderId: '1073812925824',
-  appId: '1:1073812925824:web:5205bdd78bf52c71fee565',
+  apiKey: 'AIzaSyDZx7mJqdhEPM8LOYUja15NYXFfX3WShc4',
+  authDomain: 'qineguide-app.firebaseapp.com',
+  projectId: 'qineguide-app',
+  storageBucket: 'qineguide-app.firebasestorage.app',
+  messagingSenderId: '329744586620',
+  appId: '1:329744586620:web:4f828f071f40ab97dcb6f9',
 };
 
 // Initialize Firebase
