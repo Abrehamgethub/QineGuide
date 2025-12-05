@@ -25,7 +25,7 @@ const DailyCoach = () => {
   const [showQuiz, setShowQuiz] = useState(false);
   const [completingTask, setCompletingTask] = useState<string | null>(null);
 
-  const { language: _language } = useLanguage();
+  const { t } = useLanguage();
 
   useEffect(() => {
     loadDailyPlan();
@@ -96,7 +96,7 @@ const DailyCoach = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <LoadingSpinner size="lg" text="Preparing your daily plan..." />
+        <LoadingSpinner size="lg" text={t('dailyCoach.preparing')} />
       </div>
     );
   }
@@ -106,13 +106,13 @@ const DailyCoach = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">📅 Daily Learning Coach</h1>
-          <p className="mt-2 text-gray-600">Your personalized learning tasks for today</p>
+          <h1 className="text-3xl font-bold text-gray-900">📅 {t('dailyCoach.title')}</h1>
+          <p className="mt-2 text-gray-600">{t('dailyCoach.subtitle')}</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-orange-100 px-4 py-2 rounded-full">
             <Flame className="h-5 w-5 text-orange-500" />
-            <span className="font-semibold text-orange-700">{streak} day streak</span>
+            <span className="font-semibold text-orange-700">{streak} {t('dailyCoach.streak')}</span>
           </div>
           <button
             onClick={loadDailyPlan}
@@ -127,15 +127,15 @@ const DailyCoach = () => {
       <div className="bg-gradient-to-r from-primary-500 to-purple-600 rounded-2xl p-6 text-white">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-sm opacity-90">Today's Progress</p>
+            <p className="text-sm opacity-90">{t('dailyCoach.todayProgress')}</p>
             <p className="text-3xl font-bold">
-              {completedCount}/{tasks.length} tasks
+              {completedCount}/{tasks.length} {t('dailyCoach.tasks')}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm opacity-90">Time Invested</p>
+            <p className="text-sm opacity-90">{t('dailyCoach.timeInvested')}</p>
             <p className="text-2xl font-bold">
-              {completedTime}/{totalTime} min
+              {completedTime}/{totalTime} {t('dailyCoach.min')}
             </p>
           </div>
         </div>
@@ -148,19 +148,19 @@ const DailyCoach = () => {
         {completedCount === tasks.length && tasks.length > 0 && (
           <div className="mt-4 flex items-center gap-2">
             <Trophy className="h-5 w-5 text-yellow-300" />
-            <span className="font-medium">All tasks completed! Great job! 🎉</span>
+            <span className="font-medium">{t('dailyCoach.allComplete')} 🎉</span>
           </div>
         )}
       </div>
 
       {/* Task List */}
       <div className="space-y-4">
-        <h2 className="font-semibold text-lg text-gray-900">Today's Tasks</h2>
+        <h2 className="font-semibold text-lg text-gray-900">{t('dailyCoach.todayTasks')}</h2>
         
         {tasks.length === 0 ? (
           <div className="text-center py-12 bg-gray-50 rounded-2xl">
             <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">No tasks yet. Set your career goal to get started!</p>
+            <p className="text-gray-600">{t('dailyCoach.noTasks')}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -252,10 +252,10 @@ const DailyCoach = () => {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                🧠 Daily Knowledge Check
+                🧠 {t('dailyCoach.knowledgeCheck')}
               </h3>
               <p className="text-sm text-gray-600 mt-1">
-                Test your understanding with {quizQuestions.length} quick questions
+                {t('dailyCoach.testUnderstanding')} {quizQuestions.length} {t('dailyCoach.questions')}
               </p>
             </div>
             <button
@@ -263,7 +263,7 @@ const DailyCoach = () => {
               className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
             >
               <Play className="h-4 w-4" />
-              Start Quiz
+              {t('dailyCoach.startQuiz')}
             </button>
           </div>
         </div>

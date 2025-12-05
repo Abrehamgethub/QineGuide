@@ -34,7 +34,7 @@ const Analytics = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const { language: _language } = useLanguage();
+  const { t } = useLanguage();
 
   useEffect(() => {
     loadAnalytics();
@@ -58,7 +58,7 @@ const Analytics = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <LoadingSpinner size="lg" text="Loading your analytics..." />
+        <LoadingSpinner size="lg" text={t('analytics.loadingAnalytics')} />
       </div>
     );
   }
@@ -67,8 +67,8 @@ const Analytics = () => {
     return (
       <div className="text-center py-12">
         <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-        <p className="text-gray-600">{error || 'No analytics data available'}</p>
-        <p className="text-sm text-gray-500 mt-2">Start learning to see your progress!</p>
+        <p className="text-gray-600">{error || t('analytics.noData')}</p>
+        <p className="text-sm text-gray-500 mt-2">{t('analytics.startLearning')}</p>
       </div>
     );
   }
@@ -95,8 +95,8 @@ const Analytics = () => {
     <div className="animate-fade-in space-y-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">📊 Learning Analytics</h1>
-        <p className="mt-2 text-gray-600">Track your progress and identify areas for improvement</p>
+        <h1 className="text-3xl font-bold text-gray-900">📊 {t('analytics.title')}</h1>
+        <p className="mt-2 text-gray-600">{t('analytics.subtitle')}</p>
       </div>
 
       {/* KPI Cards */}
@@ -104,37 +104,37 @@ const Analytics = () => {
         <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-4 text-white">
           <div className="flex items-center gap-2 mb-2">
             <Flame className="h-5 w-5" />
-            <span className="text-sm opacity-90">Learning Streak</span>
+            <span className="text-sm opacity-90">{t('analytics.learningStreak')}</span>
           </div>
           <p className="text-3xl font-bold">{analytics.learningStreak}</p>
-          <p className="text-sm opacity-75">days</p>
+          <p className="text-sm opacity-75">{t('analytics.days')}</p>
         </div>
 
         <div className="bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl p-4 text-white">
           <div className="flex items-center gap-2 mb-2">
             <Target className="h-5 w-5" />
-            <span className="text-sm opacity-90">Roadmap Progress</span>
+            <span className="text-sm opacity-90">{t('analytics.roadmapProgress')}</span>
           </div>
           <p className="text-3xl font-bold">{analytics.roadmapProgress}%</p>
-          <p className="text-sm opacity-75">completed</p>
+          <p className="text-sm opacity-75">{t('analytics.completed')}</p>
         </div>
 
         <div className="bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl p-4 text-white">
           <div className="flex items-center gap-2 mb-2">
             <Brain className="h-5 w-5" />
-            <span className="text-sm opacity-90">Confidence Score</span>
+            <span className="text-sm opacity-90">{t('analytics.confidenceScore')}</span>
           </div>
           <p className="text-3xl font-bold">{analytics.skillsConfidenceScore}%</p>
-          <p className="text-sm opacity-75">AI assessed</p>
+          <p className="text-sm opacity-75">{t('analytics.aiAssessed')}</p>
         </div>
 
         <div className="bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl p-4 text-white">
           <div className="flex items-center gap-2 mb-2">
             <Clock className="h-5 w-5" />
-            <span className="text-sm opacity-90">Time Invested</span>
+            <span className="text-sm opacity-90">{t('analytics.timeInvested')}</span>
           </div>
           <p className="text-3xl font-bold">{Math.round(analytics.totalLearningTime / 60)}</p>
-          <p className="text-sm opacity-75">hours</p>
+          <p className="text-sm opacity-75">{t('analytics.hours')}</p>
         </div>
       </div>
 
@@ -145,7 +145,7 @@ const Analytics = () => {
             <Brain className="h-6 w-6 text-primary-600" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 mb-2">AI Learning Insights</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">{t('analytics.aiInsights')}</h3>
             <p className="text-gray-700">{analytics.aiInsights}</p>
           </div>
         </div>
@@ -157,7 +157,7 @@ const Analytics = () => {
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary-600" />
-            Progress Over Time
+            {t('analytics.progressOverTime')}
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -182,7 +182,7 @@ const Analytics = () => {
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Award className="h-5 w-5 text-primary-600" />
-            Quiz Accuracy by Category
+            {t('analytics.quizAccuracy')}
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -201,7 +201,7 @@ const Analytics = () => {
       {/* Skills Radar */}
       {radarData.length > 2 && (
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h3 className="font-semibold text-gray-900 mb-4">Skills Radar</h3>
+          <h3 className="font-semibold text-gray-900 mb-4">{t('analytics.skillsRadar')}</h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData}>
@@ -227,7 +227,7 @@ const Analytics = () => {
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <CheckCircle className="h-5 w-5 text-green-500" />
-            Your Strengths
+            {t('analytics.yourStrengths')}
           </h3>
           {analytics.strengthAreas.length > 0 ? (
             <ul className="space-y-2">
@@ -239,7 +239,7 @@ const Analytics = () => {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">Complete more quizzes to identify your strengths!</p>
+            <p className="text-gray-500">{t('analytics.completeMoreQuizzes')}</p>
           )}
         </div>
 
@@ -247,7 +247,7 @@ const Analytics = () => {
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Target className="h-5 w-5 text-orange-500" />
-            Areas to Improve
+            {t('analytics.areasToImprove')}
           </h3>
           {analytics.weaknessAreas.length > 0 ? (
             <ul className="space-y-2">
@@ -259,7 +259,7 @@ const Analytics = () => {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">Keep practicing to identify areas for improvement!</p>
+            <p className="text-gray-500">{t('analytics.keepPracticing')}</p>
           )}
         </div>
       </div>

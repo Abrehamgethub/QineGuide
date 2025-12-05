@@ -6,6 +6,8 @@ const languages: { code: Language; name: string; nativeName: string }[] = [
   { code: 'en', name: 'English', nativeName: 'English' },
   { code: 'am', name: 'Amharic', nativeName: 'አማርኛ' },
   { code: 'om', name: 'Afan Oromo', nativeName: 'Oromiffa' },
+  { code: 'tg', name: 'Tigrigna', nativeName: 'ትግርኛ' },
+  { code: 'so', name: 'Somali', nativeName: 'Soomaali' },
 ];
 
 const LanguageSelector = () => {

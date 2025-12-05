@@ -16,29 +16,29 @@ import {
 
 type Difficulty = 'easy' | 'medium' | 'hard';
 
-const DIFFICULTY_CONFIG: Record<Difficulty, { label: string; icon: typeof Zap; color: string; description: string; questions: number }> = {
+const getDifficultyConfig = (t: (key: string) => string): Record<Difficulty, { label: string; icon: typeof Zap; color: string; description: string; questions: number }> => ({
   easy: {
-    label: 'Beginner',
+    label: t('quiz.beginner'),
     icon: Target,
     color: 'text-green-600 bg-green-100 border-green-200',
-    description: 'Basic concepts and fundamentals',
+    description: t('quiz.beginnerDesc'),
     questions: 3,
   },
   medium: {
-    label: 'Intermediate',
+    label: t('quiz.intermediate'),
     icon: Zap,
     color: 'text-yellow-600 bg-yellow-100 border-yellow-200',
-    description: 'Applied knowledge and deeper understanding',
+    description: t('quiz.intermediateDesc'),
     questions: 5,
   },
   hard: {
-    label: 'Advanced',
+    label: t('quiz.advanced'),
     icon: Flame,
     color: 'text-red-600 bg-red-100 border-red-200',
-    description: 'Complex problems and expert-level challenges',
+    description: t('quiz.advancedDesc'),
     questions: 7,
   },
-};
+});
 
 const TOPICS = [
   'Programming Basics',
@@ -64,13 +64,14 @@ const Quiz = () => {
   const [lastResult, setLastResult] = useState<QuizGradeResult | null>(null);
   const [error, setError] = useState('');
 
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
+  const DIFFICULTY_CONFIG = getDifficultyConfig(t);
 
   const selectedTopic = customTopic || topic;
 
   const handleGenerateQuiz = async () => {
     if (!selectedTopic.trim()) {
-      setError('Please select or enter a topic');
+      setError(t('quiz.selectTopic'));
       return;
     }
 
@@ -90,11 +91,11 @@ const Quiz = () => {
         setSessionId(response.data.sessionId);
         setShowQuiz(true);
       } else {
-        setError('Failed to generate quiz. Please try again.');
+        setError(t('quiz.failedGenerate'));
       }
     } catch (err) {
       console.error('Failed to generate quiz:', err);
-      setError('Failed to generate quiz. Please try again.');
+      setError(t('quiz.failedGenerate'));
     } finally {
       setLoading(false);
     }
@@ -113,11 +114,11 @@ const Quiz = () => {
       <div className="mb-8">
         <div className="inline-flex items-center gap-2 rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700 mb-4">
           <Brain className="h-4 w-4" />
-          Knowledge Quiz
+          {t('quiz.knowledgeQuiz')}
         </div>
-        <h1 className="text-3xl font-bold text-gray-900">Test Your Knowledge</h1>
+        <h1 className="text-3xl font-bold text-gray-900">{t('quiz.title')}</h1>
         <p className="mt-2 text-gray-600">
-          Challenge yourself with quizzes at different difficulty levels
+          {t('quiz.subtitle')}
         </p>
       </div>
 
@@ -140,9 +141,9 @@ const Quiz = () => {
                   : 'text-red-600'
               }`} />
               <div>
-                <p className="font-semibold text-gray-900">Last Quiz Result</p>
+                <p className="font-semibold text-gray-900">{t('quiz.lastResult')}</p>
                 <p className="text-sm text-gray-600">
-                  {lastResult.score}/{lastResult.totalQuestions} correct ({lastResult.percentage}%)
+                  {lastResult.score}/{lastResult.totalQuestions} {t('quiz.correct')} ({lastResult.percentage}%)
                 </p>
               </div>
             </div>
@@ -150,7 +151,7 @@ const Quiz = () => {
               onClick={() => setLastResult(null)}
               className="text-sm text-gray-500 hover:text-gray-700"
             >
-              Dismiss
+              {t('quiz.dismiss')}
             </button>
           </div>
         </div>
@@ -161,23 +162,23 @@ const Quiz = () => {
         {/* Topic Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Choose a Topic
+            {t('quiz.chooseTopic')}
           </label>
           <div className="flex flex-wrap gap-2 mb-3">
-            {TOPICS.map((t) => (
+            {TOPICS.map((topicItem) => (
               <button
-                key={t}
+                key={topicItem}
                 onClick={() => {
-                  setTopic(t);
+                  setTopic(topicItem);
                   setCustomTopic('');
                 }}
                 className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  topic === t && !customTopic
+                  topic === topicItem && !customTopic
                     ? 'bg-primary-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                {t}
+                {topicItem}
               </button>
             ))}
           </div>
@@ -189,7 +190,7 @@ const Quiz = () => {
                 setCustomTopic(e.target.value);
                 setTopic('');
               }}
-              placeholder="Or enter a custom topic..."
+              placeholder={t('quiz.customTopic')}
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none"
             />
           </div>
@@ -198,7 +199,7 @@ const Quiz = () => {
         {/* Difficulty Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Select Difficulty
+            {t('quiz.selectDifficulty')}
           </label>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {(Object.entries(DIFFICULTY_CONFIG) as [Difficulty, typeof DIFFICULTY_CONFIG['easy']][]).map(
@@ -233,7 +234,7 @@ const Quiz = () => {
                         />
                       ))}
                       <span className={`text-xs ml-1 ${difficulty === key ? '' : 'text-gray-400'}`}>
-                        {config.questions} questions
+                        {config.questions} {t('quiz.questions')}
                       </span>
                     </div>
                   </button>
@@ -259,12 +260,12 @@ const Quiz = () => {
           {loading ? (
             <>
               <LoadingSpinner size="sm" />
-              Generating Quiz...
+              {t('quiz.generatingQuiz')}
             </>
           ) : (
             <>
               <Play className="h-5 w-5" />
-              Start {DIFFICULTY_CONFIG[difficulty].label} Quiz
+              {t('quiz.startQuiz')} {DIFFICULTY_CONFIG[difficulty].label}
             </>
           )}
         </button>
@@ -273,11 +274,11 @@ const Quiz = () => {
         <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
           <div className="flex items-center gap-1">
             <DifficultyIcon className="h-4 w-4" />
-            {DIFFICULTY_CONFIG[difficulty].questions} Questions
+            {DIFFICULTY_CONFIG[difficulty].questions} {t('quiz.questions')}
           </div>
           <div className="flex items-center gap-1">
             <History className="h-4 w-4" />
-            ~{DIFFICULTY_CONFIG[difficulty].questions * 2} min
+            ~{DIFFICULTY_CONFIG[difficulty].questions * 2} {t('dailyCoach.min')}
           </div>
         </div>
       </div>

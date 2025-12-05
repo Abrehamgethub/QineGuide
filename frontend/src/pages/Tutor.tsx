@@ -17,6 +17,7 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
+  language?: string;
   isTyping?: boolean;
 }
 
@@ -80,6 +81,7 @@ const Tutor = () => {
       role: 'user',
       content: input.trim(),
       timestamp: new Date().toISOString(),
+      language: language, // Store the language with the message
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -95,6 +97,7 @@ const Tutor = () => {
           role: 'assistant',
           content: response.data.response,
           timestamp: new Date().toISOString(),
+          language: language, // Store the language with the response
         };
         setMessages((prev) => [...prev, aiMessage]);
 
@@ -252,7 +255,7 @@ const Tutor = () => {
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">Start a conversation</h3>
               <p className="text-gray-500 max-w-sm">
-                Ask me anything about STEM concepts, career advice, or your learning journey. I can respond in English, Amharic, or Afan Oromo!
+                Ask me anything about STEM concepts, career advice, or your learning journey. I can respond in English, Amharic, Oromiffa, Tigrigna, or Somali!
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-2">
                 {[
