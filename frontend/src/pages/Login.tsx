@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 
 const Login = () => {
@@ -11,6 +12,7 @@ const Login = () => {
   const [error, setError] = useState('');
 
   const { login, loginWithGoogle } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/career-goal';
@@ -27,19 +29,19 @@ const Login = () => {
       console.error('Login error:', err);
       const error = err as { code?: string; message?: string };
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-        setError('Invalid email or password. Please check your credentials.');
+        setError(t('auth.invalidCredentials'));
       } else if (error.code === 'auth/invalid-credential') {
-        setError('Invalid email or password. Please check your credentials.');
+        setError(t('auth.invalidCredentials'));
       } else if (error.code === 'auth/too-many-requests') {
-        setError('Too many attempts. Please wait a few minutes and try again.');
+        setError(t('auth.tooManyAttempts'));
       } else if (error.code === 'auth/invalid-api-key') {
-        setError('Configuration error. Please contact support.');
+        setError(t('auth.configError'));
       } else if (error.code === 'auth/internal-error') {
-        setError('Connection error. Please check your internet and try again.');
+        setError(t('auth.connectionError'));
       } else if (error.code === 'auth/network-request-failed') {
-        setError('Network error. Please check your internet connection.');
+        setError(t('auth.networkError'));
       } else {
-        setError(error.message || 'Failed to sign in. Please try again.');
+        setError(error.message || t('auth.signInFailed'));
       }
     } finally {
       setLoading(false);
@@ -57,18 +59,18 @@ const Login = () => {
       console.error('Google login error:', err);
       const error = err as { code?: string; message?: string };
       if (error.code === 'auth/popup-closed-by-user') {
-        setError('Sign-in was cancelled.');
+        setError(t('auth.signInCancelled'));
       } else if (error.code === 'auth/popup-blocked') {
-        setError('Pop-up was blocked. Please allow pop-ups for this site.');
+        setError(t('auth.popupBlocked'));
       } else if (error.code === 'auth/internal-error') {
-        setError('Connection error. Please check your internet and try again.');
+        setError(t('auth.connectionError'));
       } else if (error.code === 'auth/network-request-failed') {
-        setError('Network error. Please check your internet connection.');
+        setError(t('auth.networkError'));
       } else if (error.code === 'auth/cancelled-popup-request') {
         // This is normal when multiple popup requests happen, ignore it
         setError('');
       } else {
-        setError(error.message || 'Failed to sign in with Google. Please try again.');
+        setError(error.message || t('auth.googleSignInFailed'));
       }
     } finally {
       setLoading(false);
@@ -86,8 +88,8 @@ const Login = () => {
             </div>
             <span className="text-2xl font-bold text-gray-900">QineGuide</span>
           </Link>
-          <h1 className="mt-6 text-2xl font-bold text-gray-900">Welcome back</h1>
-          <p className="mt-2 text-gray-600">Sign in to continue your learning journey</p>
+          <h1 className="mt-6 text-2xl font-bold text-gray-900">{t('auth.welcomeBack')}</h1>
+          <p className="mt-2 text-gray-600">{t('auth.signInContinue')}</p>
         </div>
 
         {/* Form */}
@@ -103,7 +105,7 @@ const Login = () => {
             {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Email address
+                {t('auth.email')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
@@ -112,7 +114,7 @@ const Login = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder={t('auth.enterEmail')}
                   required
                   className="w-full rounded-lg border border-gray-200 py-3 pl-10 pr-4 text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
                 />
@@ -122,7 +124,7 @@ const Login = () => {
             {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Password
+                {t('auth.password')}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
@@ -131,7 +133,7 @@ const Login = () => {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  placeholder={t('auth.enterPassword')}
                   required
                   className="w-full rounded-lg border border-gray-200 py-3 pl-10 pr-12 text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
                 />
@@ -154,7 +156,7 @@ const Login = () => {
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin mx-auto" />
               ) : (
-                'Sign In'
+                t('auth.signIn')
               )}
             </button>
           </form>
@@ -162,7 +164,7 @@ const Login = () => {
           {/* Divider */}
           <div className="my-6 flex items-center gap-4">
             <div className="h-px flex-1 bg-gray-200" />
-            <span className="text-sm text-gray-400">or</span>
+            <span className="text-sm text-gray-400">{t('auth.or')}</span>
             <div className="h-px flex-1 bg-gray-200" />
           </div>
 
@@ -190,14 +192,14 @@ const Login = () => {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Continue with Google
+            {t('auth.continueGoogle')}
           </button>
 
           {/* Register Link */}
           <p className="mt-6 text-center text-sm text-gray-600">
-            Don't have an account?{' '}
+            {t('auth.noAccount')}{' '}
             <Link to="/register" className="font-medium text-primary-600 hover:text-primary-700">
-              Sign up
+              {t('auth.signUp')}
             </Link>
           </p>
         </div>

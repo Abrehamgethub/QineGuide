@@ -64,7 +64,7 @@ const CareerGoal = () => {
     e.preventDefault();
     
     if (!careerGoal.trim()) {
-      setError('Please enter a career goal');
+      setError(t('career.enterGoal') || 'Please enter a career goal');
       return;
     }
 
