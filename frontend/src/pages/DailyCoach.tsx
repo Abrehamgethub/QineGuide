@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { dailyPlanApi, DailyTask, QuizQuestion } from '../api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import QuizModal from '../components/QuizModal';
+import { fixURL } from '../components/ExternalLink';
 import {
   Calendar,
   Circle,
@@ -269,18 +270,27 @@ const DailyCoach = () => {
                     {/* Resources */}
                     {task.resources.length > 0 && !task.completed && (
                       <div className="mt-3 pt-3 border-t border-surface-100 flex flex-wrap gap-2">
-                        {task.resources.slice(0, 2).map((resource, i) => (
-                          <a
-                            key={i}
-                            href={resource.includes('http') ? resource : '#'}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-primary-500 hover:text-primary-600 flex items-center gap-1.5 bg-primary-50 px-3 py-1.5 rounded-full transition-colors"
-                          >
-                            <ExternalLink className="h-3 w-3" />
-                            {resource.length > 25 ? resource.slice(0, 25) + '...' : resource}
-                          </a>
-                        ))}
+                        {task.resources.slice(0, 2).map((resource, i) => {
+                          const fixedUrl = fixURL(resource);
+                          const isValidUrl = /^https?:\/\//i.test(fixedUrl);
+                          const href = isValidUrl 
+                            ? fixedUrl 
+                            : `https://www.google.com/search?q=${encodeURIComponent(resource)}`;
+                          
+                          return (
+                            <a
+                              key={i}
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-primary-500 hover:text-primary-600 flex items-center gap-1.5 bg-primary-50 px-3 py-1.5 rounded-full transition-colors"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              {resource.length > 25 ? resource.slice(0, 25) + '...' : resource}
+                            </a>
+                          );
+                        })}
                       </div>
                     )}
                   </div>

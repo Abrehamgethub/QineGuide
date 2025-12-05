@@ -2,6 +2,7 @@ import { ChevronDown, ChevronUp, BookOpen, Clock, Zap, Check, Play, ExternalLink
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { fixURL } from './ExternalLink';
 
 interface RoadmapStageProps {
   stageNumber: number;
@@ -141,22 +142,13 @@ const RoadmapStageCard = ({
               </h4>
               <div className="space-y-2">
                 {resources.slice(0, 3).map((resource, index) => {
-                  // Detect and sanitize external URLs
-                  const isExternalUrl = /^https?:\/\//i.test(resource) || 
-                                        resource.startsWith('//') ||
-                                        /^\/https?:\/\//i.test(resource);
+                  // Use fixURL utility to properly sanitize URLs
+                  const fixedUrl = fixURL(resource);
+                  const isExternalUrl = /^https?:\/\//i.test(fixedUrl);
                   
-                  // Clean URL: remove leading slash before http(s)
-                  let cleanUrl = resource;
-                  if (/^\/https?:\/\//i.test(resource)) {
-                    cleanUrl = resource.substring(1);
-                  } else if (resource.startsWith('//')) {
-                    cleanUrl = 'https:' + resource;
-                  }
-                  
-                  // Final URL - external or Google search
+                  // Final URL - external or Google search for non-URLs
                   const href = isExternalUrl 
-                    ? cleanUrl 
+                    ? fixedUrl 
                     : `https://www.google.com/search?q=${encodeURIComponent(resource)}`;
                   
                   // Display text
@@ -172,7 +164,7 @@ const RoadmapStageCard = ({
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-2 rounded-xl transition-colors"
                       onClick={(e) => e.stopPropagation()}
-                      title={isExternalUrl ? cleanUrl : resource}
+                      title={isExternalUrl ? fixedUrl : resource}
                     >
                       <ExternalLink className="h-3.5 w-3.5 flex-shrink-0" />
                       <span className="truncate">{isExternalUrl ? displayText : resource}</span>

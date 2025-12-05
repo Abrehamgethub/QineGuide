@@ -1,4 +1,5 @@
 import { ExternalLink, Bookmark, BookmarkCheck, Briefcase } from 'lucide-react';
+import { fixURL } from './ExternalLink';
 
 interface OpportunityCardProps {
   title: string;
@@ -84,10 +85,11 @@ const OpportunityCard = ({
 
       {/* Link */}
       <a
-        href={url}
+        href={fixURL(url)}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-4 flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700"
+        onClick={(e) => e.stopPropagation()}
       >
         <span>View Opportunity</span>
         <ExternalLink className="h-4 w-4" />

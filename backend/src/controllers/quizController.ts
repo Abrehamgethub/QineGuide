@@ -65,20 +65,55 @@ export const quizController = {
   grade: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
     const { sessionId, answers, questions, language = 'en' } = req.body;
     
-    let quizQuestions: QuizQuestion[] = questions;
+    // Validate required fields
+    if (!answers || typeof answers !== 'object' || Object.keys(answers).length === 0) {
+      res.status(400).json({
+        success: false,
+        error: 'invalid_quiz_payload',
+        message: 'answers object is required and must contain at least one answer.',
+      });
+      return;
+    }
     
-    // If session ID provided, get questions from database
+    // Need either sessionId (to look up questions) or questions array
+    if (!sessionId && (!questions || !Array.isArray(questions) || questions.length === 0)) {
+      res.status(400).json({
+        success: false,
+        error: 'invalid_quiz_payload',
+        message: 'Either sessionId or questions array is required.',
+      });
+      return;
+    }
+    
+    let quizQuestions: QuizQuestion[] = questions || [];
+    
+    // If session ID provided and user is authenticated, get questions from database (with correctAnswer)
     if (sessionId && req.user) {
-      const sessionRef = db.collection('users').doc(req.user.uid)
-        .collection('quizSessions').doc(sessionId);
-      const session = await sessionRef.get();
-      
-      if (session.exists) {
-        quizQuestions = session.data()!.questions;
+      try {
+        const sessionRef = db.collection('users').doc(req.user.uid)
+          .collection('quizSessions').doc(sessionId);
+        const session = await sessionRef.get();
+        
+        if (session.exists) {
+          quizQuestions = session.data()!.questions;
+          logger.info('Retrieved questions from session:', sessionId);
+        }
+      } catch (err) {
+        logger.warn('Failed to retrieve session, using provided questions:', err);
       }
     }
     
-    logger.info('Grading quiz with', Object.keys(answers).length, 'answers');
+    // Validate we have questions to grade
+    if (!quizQuestions || quizQuestions.length === 0) {
+      res.status(400).json({
+        success: false,
+        error: 'invalid_quiz_payload',
+        message: 'No questions available for grading.',
+      });
+      return;
+    }
+    
+    logger.info('Grading quiz with', Object.keys(answers).length, 'answers for', quizQuestions.length, 'questions');
     
     const result = await geminiService.gradeQuiz(quizQuestions, answers, language);
     
