@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { roadmapApi } from '../api';
 import RoadmapStageCard from '../components/RoadmapStageCard';
-import { Target, Loader2, ArrowRight, Sparkles, RefreshCw, CheckCircle, Map, ChevronDown, ChevronUp } from 'lucide-react';
+import { 
+  Target, Loader2, ArrowRight, Sparkles, RefreshCw, CheckCircle, Map, 
+  ChevronDown, ChevronUp, Search, BarChart3, Brain, MessageCircle, Calendar 
+} from 'lucide-react';
 
 interface RoadmapStage {
   title: string;
@@ -39,6 +43,7 @@ const CareerGoal = () => {
   const [isGoalExpanded, setIsGoalExpanded] = useState(true);
 
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
 
   // Load existing roadmap from session storage
   useEffect(() => {
@@ -300,6 +305,55 @@ const CareerGoal = () => {
               <p className="opacity-90">You've completed all stages of your roadmap!</p>
             </div>
           )}
+
+          {/* Secondary Actions */}
+          <div className="rounded-2xl bg-white/80 backdrop-blur-lg shadow-lg border border-gray-100 p-6 animate-fade-in">
+            <h3 className="font-semibold text-gray-900 mb-4">{t('career.roadmapStages')} - {t('common.loading').replace('...', '')}</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <button
+                onClick={() => setIsGoalExpanded(true)}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 hover:from-primary-100 hover:to-primary-200 border border-primary-200 transition-all group"
+              >
+                <Target className="h-6 w-6 text-primary-600 group-hover:scale-110 transition-transform" />
+                <span className="text-sm font-medium text-primary-700">{t('career.newGoal')}</span>
+              </button>
+              <button
+                onClick={() => navigate('/opportunities')}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 border border-blue-200 transition-all group"
+              >
+                <Search className="h-6 w-6 text-blue-600 group-hover:scale-110 transition-transform" />
+                <span className="text-sm font-medium text-blue-700">{t('career.findOpportunities')}</span>
+              </button>
+              <button
+                onClick={() => navigate('/daily-coach')}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 border border-orange-200 transition-all group"
+              >
+                <Calendar className="h-6 w-6 text-orange-600 group-hover:scale-110 transition-transform" />
+                <span className="text-sm font-medium text-orange-700">{t('career.goToDailyCoach')}</span>
+              </button>
+              <button
+                onClick={() => navigate('/analytics')}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 border border-green-200 transition-all group"
+              >
+                <BarChart3 className="h-6 w-6 text-green-600 group-hover:scale-110 transition-transform" />
+                <span className="text-sm font-medium text-green-700">{t('career.viewAnalytics')}</span>
+              </button>
+              <button
+                onClick={() => navigate('/quiz')}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 border border-purple-200 transition-all group"
+              >
+                <Brain className="h-6 w-6 text-purple-600 group-hover:scale-110 transition-transform" />
+                <span className="text-sm font-medium text-purple-700">{t('career.takeQuiz')}</span>
+              </button>
+              <button
+                onClick={() => navigate('/tutor')}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 hover:from-pink-100 hover:to-pink-200 border border-pink-200 transition-all group"
+              >
+                <MessageCircle className="h-6 w-6 text-pink-600 group-hover:scale-110 transition-transform" />
+                <span className="text-sm font-medium text-pink-700">{t('career.talkToTutor')}</span>
+              </button>
+            </div>
+          </div>
         </div>
       ) : !loading && (
         /* Info Card - Show only when no roadmap */

@@ -1,7 +1,7 @@
 import { Request } from 'express';
 
-// Language types for multilingual support
-export type Language = 'am' | 'om' | 'en';
+// Language types for multilingual support (5 languages)
+export type Language = 'en' | 'am' | 'om' | 'tg' | 'so';
 
 // User Profile
 export interface UserProfile {

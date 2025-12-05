@@ -136,9 +136,16 @@ export const tutorController = {
 
       if (historyId) {
         const history = await firestoreService.getChatHistory(uid, historyId);
+        // Return messages array sorted by timestamp for proper chat rendering
+        const messages = history?.messages || [];
+        messages.sort((a, b) => {
+          const timeA = a.timestamp instanceof Date ? a.timestamp.getTime() : new Date(a.timestamp).getTime();
+          const timeB = b.timestamp instanceof Date ? b.timestamp.getTime() : new Date(b.timestamp).getTime();
+          return timeA - timeB;
+        });
         res.status(200).json({
           success: true,
-          data: history,
+          data: messages,
         });
       } else {
         const histories = await firestoreService.getAllChatHistories(uid);

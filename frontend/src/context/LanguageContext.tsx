@@ -134,6 +134,70 @@ const translations: Record<Language, Record<string, string>> = {
     'quiz.startQuiz': 'Start',
     'quiz.selectTopic': 'Please select or enter a topic',
     'quiz.failedGenerate': 'Failed to generate quiz. Please try again.',
+
+    // Settings
+    'settings.title': 'Settings',
+    'settings.language': 'Language',
+    'settings.notifications': 'Notifications',
+    'settings.theme': 'Theme',
+    'settings.darkMode': 'Dark Mode',
+    'settings.account': 'Account Settings',
+    'settings.privacy': 'Privacy',
+    'settings.save': 'Save Settings',
+
+    // Mentors
+    'mentors.title': 'Find a Mentor',
+    'mentors.subtitle': 'Connect with experienced professionals in your field',
+    'mentors.search': 'Search mentors...',
+    'mentors.filter': 'Filter by expertise',
+    'mentors.all': 'All',
+    'mentors.available': 'Available',
+    'mentors.busy': 'Busy',
+    'mentors.limited': 'Limited',
+    'mentors.requestMentorship': 'Request Mentorship',
+    'mentors.viewLinkedIn': 'View on LinkedIn',
+    'mentors.mentees': 'mentees',
+    'mentors.experience': 'experience',
+    'mentors.noMentors': 'No mentors found',
+    'mentors.becomeMentor': 'Become a Mentor',
+    'mentors.becomeMentorDesc': 'Help shape the next generation of Ethiopian tech talent',
+
+    // Extended Tutor
+    'tutor.startConversation': 'Start a conversation',
+    'tutor.askAnything': 'Ask me anything about STEM concepts, career advice, or your learning journey.',
+    'tutor.supportedLanguages': 'I can respond in English, Amharic, Oromiffa, Tigrigna, or Somali!',
+    'tutor.voiceOn': 'Voice On',
+    'tutor.voiceOff': 'Voice Off',
+    'tutor.voiceNotAvailable': 'Voice not available',
+    'tutor.clear': 'Clear',
+    'tutor.chatHistory': 'Chat History',
+
+    // Extended Opportunities  
+    'opportunities.subtitle': 'Discover scholarships, internships, and job opportunities',
+    'opportunities.loading': 'Finding opportunities for you...',
+    'opportunities.noOpportunities': 'No opportunities found',
+    'opportunities.setGoalFirst': 'Set a career goal to find relevant opportunities',
+    'opportunities.deadline': 'Deadline',
+    'opportunities.location': 'Location',
+    'opportunities.apply': 'Apply Now',
+    'opportunities.learnMore': 'Learn More',
+
+    // Extended Daily Coach
+    'dailyCoach.oneHour': '1 hour',
+    'dailyCoach.dailyTime': 'Daily learning time',
+    'dailyCoach.markComplete': 'Mark as complete',
+    'dailyCoach.markIncomplete': 'Mark as incomplete',
+
+    // Career Goal Extended
+    'career.yourGoal': 'Your Career Goal',
+    'career.changeGoal': 'Change Goal',
+    'career.roadmapStages': 'Roadmap Stages',
+    'career.newGoal': 'New Career Goal',
+    'career.findOpportunities': 'Find Opportunities',
+    'career.viewAnalytics': 'View Analytics',
+    'career.takeQuiz': 'Take Quiz',
+    'career.talkToTutor': 'Talk to AI Tutor',
+    'career.goToDailyCoach': 'Daily Coach',
   },
   am: {
     // Navigation
@@ -252,6 +316,70 @@ const translations: Record<Language, Record<string, string>> = {
     'quiz.startQuiz': 'ጀምር',
     'quiz.selectTopic': 'እባክዎ ርዕስ ይምረጡ ወይም ያስገቡ',
     'quiz.failedGenerate': 'ፈተና ማመንጨት አልተሳካም። እንደገና ይሞክሩ።',
+
+    // Settings
+    'settings.title': 'ቅንብሮች',
+    'settings.language': 'ቋንቋ',
+    'settings.notifications': 'ማሳወቂያዎች',
+    'settings.theme': 'ገጽታ',
+    'settings.darkMode': 'ጨለማ ሁነታ',
+    'settings.account': 'የመለያ ቅንብሮች',
+    'settings.privacy': 'ግላዊነት',
+    'settings.save': 'ቅንብሮችን አስቀምጥ',
+
+    // Mentors
+    'mentors.title': 'አማካሪ ፈልግ',
+    'mentors.subtitle': 'በመስክዎ ልምድ ካላቸው ባለሙያዎች ጋር ይገናኙ',
+    'mentors.search': 'አማካሪዎችን ፈልግ...',
+    'mentors.filter': 'በሙያ አጣራ',
+    'mentors.all': 'ሁሉም',
+    'mentors.available': 'ይገኛሉ',
+    'mentors.busy': 'ስራ ላይ',
+    'mentors.limited': 'ውስን',
+    'mentors.requestMentorship': 'አማካሪነት ጠይቅ',
+    'mentors.viewLinkedIn': 'በLinkedIn ይመልከቱ',
+    'mentors.mentees': 'ተማሪዎች',
+    'mentors.experience': 'ልምድ',
+    'mentors.noMentors': 'አማካሪ አልተገኘም',
+    'mentors.becomeMentor': 'አማካሪ ይሁኑ',
+    'mentors.becomeMentorDesc': 'የኢትዮጵያን ቴክ ትውልድ ቅርጽ ይስጡ',
+
+    // Extended Tutor
+    'tutor.startConversation': 'ውይይት ጀምር',
+    'tutor.askAnything': 'ስለ STEM ጽንሰ-ሀሳቦች፣ የሙያ ምክር ወይም የትምህርት ጉዞዎ ማንኛውንም ነገር ይጠይቁ።',
+    'tutor.supportedLanguages': 'በእንግሊዝኛ፣ አማርኛ፣ ኦሮምኛ፣ ትግርኛ ወይም ሶማሊኛ መልስ መስጠት እችላለሁ!',
+    'tutor.voiceOn': 'ድምጽ በርቷል',
+    'tutor.voiceOff': 'ድምጽ ጠፍቷል',
+    'tutor.voiceNotAvailable': 'ድምጽ የለም',
+    'tutor.clear': 'አጥፋ',
+    'tutor.chatHistory': 'የውይይት ታሪክ',
+
+    // Extended Opportunities
+    'opportunities.subtitle': 'የስኮላርሺፕ፣ ልምምድ እና የስራ እድሎችን ያግኙ',
+    'opportunities.loading': 'ለእርስዎ እድሎችን በመፈለግ ላይ...',
+    'opportunities.noOpportunities': 'እድል አልተገኘም',
+    'opportunities.setGoalFirst': 'ተዛማጅ እድሎችን ለማግኘት የስራ ግብ ያስቀምጡ',
+    'opportunities.deadline': 'የመጨረሻ ቀን',
+    'opportunities.location': 'ቦታ',
+    'opportunities.apply': 'አሁን ያመልክቱ',
+    'opportunities.learnMore': 'ተጨማሪ ይወቁ',
+
+    // Extended Daily Coach
+    'dailyCoach.oneHour': '1 ሰዓት',
+    'dailyCoach.dailyTime': 'ዕለታዊ የትምህርት ጊዜ',
+    'dailyCoach.markComplete': 'እንደተጠናቀቀ ምልክት አድርግ',
+    'dailyCoach.markIncomplete': 'እንዳልተጠናቀቀ ምልክት አድርግ',
+
+    // Career Goal Extended
+    'career.yourGoal': 'የስራ ግብዎ',
+    'career.changeGoal': 'ግብ ቀይር',
+    'career.roadmapStages': 'የመንገድ ደረጃዎች',
+    'career.newGoal': 'አዲስ የስራ ግብ',
+    'career.findOpportunities': 'እድሎችን ፈልግ',
+    'career.viewAnalytics': 'ትንታኔ ይመልከቱ',
+    'career.takeQuiz': 'ፈተና ውሰድ',
+    'career.talkToTutor': 'ከAI አስተማሪ ጋር አውራ',
+    'career.goToDailyCoach': 'ዕለታዊ አሰልጣኝ',
   },
   om: {
     // Navigation
@@ -370,6 +498,70 @@ const translations: Record<Language, Record<string, string>> = {
     'quiz.startQuiz': 'Jalqabi',
     'quiz.selectTopic': 'Maaloo mata-duree fili yookiin galchi',
     'quiz.failedGenerate': 'Qormaata uumuu hin dandeenye. Irra deebi\'i yaali.',
+
+    // Settings
+    'settings.title': 'Qindaa\'inoota',
+    'settings.language': 'Afaan',
+    'settings.notifications': 'Beeksisa',
+    'settings.theme': 'Bifa',
+    'settings.darkMode': 'Haalata Dukkana',
+    'settings.account': 'Qindaa\'ina Herrega',
+    'settings.privacy': 'Iccitii',
+    'settings.save': 'Qindaa\'inoota Olkaa\'i',
+
+    // Mentors
+    'mentors.title': 'Gorsitoota Barbaadi',
+    'mentors.subtitle': 'Ogeessota muuxannoo qabu waliin wal qunnamii',
+    'mentors.search': 'Gorsitoota barbaadi...',
+    'mentors.filter': 'Ogummaadhaan qoodi',
+    'mentors.all': 'Hunda',
+    'mentors.available': 'Ni argamu',
+    'mentors.busy': 'Hojii irra',
+    'mentors.limited': 'Daangeffame',
+    'mentors.requestMentorship': 'Gorsummaa Gaafadhu',
+    'mentors.viewLinkedIn': 'LinkedIn irratti ilaali',
+    'mentors.mentees': 'barattootaa',
+    'mentors.experience': 'muuxannoo',
+    'mentors.noMentors': 'Gorsitoonni hin argamne',
+    'mentors.becomeMentor': 'Gorsitaa Ta\'i',
+    'mentors.becomeMentorDesc': 'Dhaloota teeknikaa Itoophiyaa boca itti kenni',
+
+    // Extended Tutor
+    'tutor.startConversation': 'Haasaa jalqabi',
+    'tutor.askAnything': 'Waa\'ee yaad-rimee STEM, gorsa hojii ykn imala barnoota kee waan kamiyyuu gaafadhu.',
+    'tutor.supportedLanguages': 'Afaan Ingiliffaa, Amaariffaa, Oromiffaa, Tigrigna ykn Somaalee deebii kennuu nan danda\'a!',
+    'tutor.voiceOn': 'Sagaleen Baname',
+    'tutor.voiceOff': 'Sagaleen Cufame',
+    'tutor.voiceNotAvailable': 'Sagaleen hin jiru',
+    'tutor.clear': 'Haqi',
+    'tutor.chatHistory': 'Seenaa Haasaa',
+
+    // Extended Opportunities
+    'opportunities.subtitle': 'Iskoolarshiippii, leenjii fi carraa hojii argadhu',
+    'opportunities.loading': 'Siif carraalee barbaadaa jira...',
+    'opportunities.noOpportunities': 'Carraan hin argamne',
+    'opportunities.setGoalFirst': 'Carraalee walitti dhufan argachuuf kaayyoo hojii galchi',
+    'opportunities.deadline': 'Guyyaa dhumaa',
+    'opportunities.location': 'Iddoo',
+    'opportunities.apply': 'Amma Iyyadhu',
+    'opportunities.learnMore': 'Dabalata Bari',
+
+    // Extended Daily Coach
+    'dailyCoach.oneHour': 'Sa\'aatii 1',
+    'dailyCoach.dailyTime': 'Yeroo barnoota guyyaa',
+    'dailyCoach.markComplete': 'Xumurame jedhi',
+    'dailyCoach.markIncomplete': 'Hin xumuramne jedhi',
+
+    // Career Goal Extended
+    'career.yourGoal': 'Kaayyoo Hojii Kee',
+    'career.changeGoal': 'Kaayyoo Jijjiiri',
+    'career.roadmapStages': 'Sadarkaalee Karaa',
+    'career.newGoal': 'Kaayyoo Hojii Haaraa',
+    'career.findOpportunities': 'Carraalee Barbaadi',
+    'career.viewAnalytics': 'Xiinxala Ilaali',
+    'career.takeQuiz': 'Qormaata Fudhadhu',
+    'career.talkToTutor': 'Barsiisaa AI waliin Haasa\'i',
+    'career.goToDailyCoach': 'Leenjisaa Guyyaa',
   },
   tg: {
     // Navigation - Tigrigna
@@ -488,6 +680,70 @@ const translations: Record<Language, Record<string, string>> = {
     'quiz.startQuiz': 'ጀምር',
     'quiz.selectTopic': 'በጃኻ ኣርእስቲ ምረጽ ወይ ኣእቱ',
     'quiz.failedGenerate': 'ፈተና ምፍጣር ኣይተኻእለን። ደጊምካ ፈትን።',
+
+    // Settings
+    'settings.title': 'ቅጥዕታት',
+    'settings.language': 'ቋንቋ',
+    'settings.notifications': 'መፍለጢታት',
+    'settings.theme': 'ቅርጺ',
+    'settings.darkMode': 'ጸልማት ሁነታ',
+    'settings.account': 'ቅጥዕታት ሕሳብ',
+    'settings.privacy': 'ውልቃውነት',
+    'settings.save': 'ቅጥዕታት ዓቅብ',
+
+    // Mentors
+    'mentors.title': 'ኣማኻሪ ድለ',
+    'mentors.subtitle': 'ምስ ልምድታት ክኢላታት ተራኸብ',
+    'mentors.search': 'ኣማኻሪታት ድለ...',
+    'mentors.filter': 'ብሞያ ጽረ',
+    'mentors.all': 'ኩሉ',
+    'mentors.available': 'ይርከቡ',
+    'mentors.busy': 'ስራሕ ኣለዎም',
+    'mentors.limited': 'ውሱን',
+    'mentors.requestMentorship': 'ኣማኻርነት ሕተት',
+    'mentors.viewLinkedIn': 'ኣብ LinkedIn ርአ',
+    'mentors.mentees': 'ተምሃሮ',
+    'mentors.experience': 'ልምድ',
+    'mentors.noMentors': 'ኣማኻሪ ኣይተረኽበን',
+    'mentors.becomeMentor': 'ኣማኻሪ ኹን',
+    'mentors.becomeMentorDesc': 'ንዝመጽእ ወለዶ ቴክ ኢትዮጵያ ቅርጺ ሃብ',
+
+    // Extended Tutor
+    'tutor.startConversation': 'ዝርርብ ጀምር',
+    'tutor.askAnything': 'ብዛዕባ STEM ሓሳባት፣ ምኽሪ ሞያ ወይ ጉዕዞ ትምህርትኻ ዝኾነ ሕተት።',
+    'tutor.supportedLanguages': 'ብእንግሊዝኛ፣ ኣምሓርኛ፣ ኦሮሚፋ፣ ትግርኛ ወይ ሶማሊ መልሲ ክህብ እኽእል!',
+    'tutor.voiceOn': 'ድምጺ ተኸፊቱ',
+    'tutor.voiceOff': 'ድምጺ ተዓጽዩ',
+    'tutor.voiceNotAvailable': 'ድምጺ የለን',
+    'tutor.clear': 'ኣጽሪ',
+    'tutor.chatHistory': 'ታሪኽ ዝርርብ',
+
+    // Extended Opportunities
+    'opportunities.subtitle': 'ስኮላርሺፕ፣ ልምምድን ዕድላት ስራሕን ረኸብ',
+    'opportunities.loading': 'ንዓኻ ዕድላት እደሊ ኣለኹ...',
+    'opportunities.noOpportunities': 'ዕድል ኣይተረኽበን',
+    'opportunities.setGoalFirst': 'ዝምልከቱ ዕድላት ንምርካብ ዕላማ ስራሕ ኣእቱ',
+    'opportunities.deadline': 'ናይ መወዳእታ ዕለት',
+    'opportunities.location': 'ቦታ',
+    'opportunities.apply': 'ሕጂ ኣመልክት',
+    'opportunities.learnMore': 'ተወሳኺ ፍለጥ',
+
+    // Extended Daily Coach
+    'dailyCoach.oneHour': '1 ሰዓት',
+    'dailyCoach.dailyTime': 'ዕለታዊ ግዜ ትምህርቲ',
+    'dailyCoach.markComplete': 'ከም ዝተዛዘመ ምልክት ግበር',
+    'dailyCoach.markIncomplete': 'ከም ዘይተዛዘመ ምልክት ግበር',
+
+    // Career Goal Extended
+    'career.yourGoal': 'ዕላማ ስራሕካ',
+    'career.changeGoal': 'ዕላማ ቀይር',
+    'career.roadmapStages': 'ደረጃታት መገዲ',
+    'career.newGoal': 'ሓድሽ ዕላማ ስራሕ',
+    'career.findOpportunities': 'ዕድላት ድለ',
+    'career.viewAnalytics': 'ትንተና ርአ',
+    'career.takeQuiz': 'ፈተና ውሰድ',
+    'career.talkToTutor': 'ምስ AI መምህር ተዛረብ',
+    'career.goToDailyCoach': 'ዕለታዊ መምህር',
   },
   so: {
     // Navigation - Somali
@@ -606,6 +862,70 @@ const translations: Record<Language, Record<string, string>> = {
     'quiz.startQuiz': 'Bilow',
     'quiz.selectTopic': 'Fadlan dooro ama geli mawduuc',
     'quiz.failedGenerate': 'Samaynta imtixaanka wuu guul daraystay. Mar kale isku day.',
+
+    // Settings
+    'settings.title': 'Dejinta',
+    'settings.language': 'Luqadda',
+    'settings.notifications': 'Ogeysiisyada',
+    'settings.theme': 'Muuqaalka',
+    'settings.darkMode': 'Habka Madow',
+    'settings.account': 'Dejinta Akoonka',
+    'settings.privacy': 'Sirta',
+    'settings.save': 'Kaydi Dejinta',
+
+    // Mentors
+    'mentors.title': 'Raadi La-talin',
+    'mentors.subtitle': 'Kala xidhiidh khabiiro waayo-aragnimo leh',
+    'mentors.search': 'Raadi la-taliye...',
+    'mentors.filter': 'Ku kala sooc aqoonta',
+    'mentors.all': 'Dhammaan',
+    'mentors.available': 'Waa la heli karaa',
+    'mentors.busy': 'Wuu mashquulsan yahay',
+    'mentors.limited': 'Xaddidan',
+    'mentors.requestMentorship': 'Codso La-talin',
+    'mentors.viewLinkedIn': 'Ku arag LinkedIn',
+    'mentors.mentees': 'ardayda',
+    'mentors.experience': 'waayo-aragnimo',
+    'mentors.noMentors': 'La-taliye lama helin',
+    'mentors.becomeMentor': 'Noqo La-taliye',
+    'mentors.becomeMentorDesc': 'Ka qayb qaado korinta jiilka tech ee Itoobiya',
+
+    // Extended Tutor
+    'tutor.startConversation': 'Bilow wadahadal',
+    'tutor.askAnything': 'Wax kasta weydii ku saabsan STEM, talo shaqo, ama safarka waxbarashadaada.',
+    'tutor.supportedLanguages': 'Waxaan ku jawaabi karaa Ingiriisi, Amxaarig, Oromiffa, Tigrinya, ama Soomaali!',
+    'tutor.voiceOn': 'Codka Furan',
+    'tutor.voiceOff': 'Codka Xiran',
+    'tutor.voiceNotAvailable': 'Cod ma jiro',
+    'tutor.clear': 'Nadiifi',
+    'tutor.chatHistory': 'Taariikhda Wadahadalka',
+
+    // Extended Opportunities
+    'opportunities.subtitle': 'Hel deeq waxbarasho, tababar, iyo fursado shaqo',
+    'opportunities.loading': 'Fursado kuu raadiyaa...',
+    'opportunities.noOpportunities': 'Fursad lama helin',
+    'opportunities.setGoalFirst': 'Geli hadafka shaqada si aad u hesho fursado ku habboon',
+    'opportunities.deadline': 'Wakhtiga ugu dambeeya',
+    'opportunities.location': 'Goobta',
+    'opportunities.apply': 'Hadda Codso',
+    'opportunities.learnMore': 'Wax badan Baro',
+
+    // Extended Daily Coach
+    'dailyCoach.oneHour': '1 saac',
+    'dailyCoach.dailyTime': 'Waqtiga waxbarashada maalinlaha',
+    'dailyCoach.markComplete': 'Calaamadee dhammaystiran',
+    'dailyCoach.markIncomplete': 'Calaamadee aan dhammaystirnayn',
+
+    // Career Goal Extended
+    'career.yourGoal': 'Hadafkaaga Shaqada',
+    'career.changeGoal': 'Bedel Hadafka',
+    'career.roadmapStages': 'Heerarka Dariiqa',
+    'career.newGoal': 'Hadaf Shaqo Cusub',
+    'career.findOpportunities': 'Raadi Fursado',
+    'career.viewAnalytics': 'Arag Falanqaynta',
+    'career.takeQuiz': 'Qaado Imtixaan',
+    'career.talkToTutor': 'La hadal Macalinka AI',
+    'career.goToDailyCoach': 'Tababaraha Maalinlaha',
   },
 };
 

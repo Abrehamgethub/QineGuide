@@ -335,6 +335,14 @@ export const dailyPlanApi = {
   },
 
   /**
+   * Toggle task completion (check/uncheck)
+   */
+  toggleTask: async (taskId: string, completed: boolean): Promise<ApiResponse<{ tasks: DailyTask[] }>> => {
+    const response = await apiClient.post('/daily-plan/toggle', { taskId, completed });
+    return response.data;
+  },
+
+  /**
    * Get plan history
    */
   getHistory: async (limit?: number): Promise<ApiResponse<DailyPlanHistory[]>> => {

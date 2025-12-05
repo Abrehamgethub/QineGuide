@@ -4,7 +4,6 @@ import { useLanguage } from '../context/LanguageContext';
 import { useIdleLogout } from '../hooks/useIdleLogout';
 import {
   Target,
-  Map,
   MessageCircle,
   Briefcase,
   User,
@@ -34,7 +33,6 @@ const Layout = () => {
 
   const navItems = [
     { path: '/career-goal', icon: Target, label: t('nav.career') },
-    { path: '/roadmap', icon: Map, label: t('nav.roadmap') },
     { path: '/daily-coach', icon: Calendar, label: 'Daily Coach' },
     { path: '/tutor', icon: MessageCircle, label: t('nav.tutor') },
     { path: '/quiz', icon: Brain, label: 'Quiz' },

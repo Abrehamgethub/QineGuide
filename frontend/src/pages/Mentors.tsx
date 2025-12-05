@@ -15,6 +15,7 @@ import {
 interface Mentor {
   id: string;
   name: string;
+  fullName: string; // Used for LinkedIn search
   title: string;
   company: string;
   location: string;
@@ -24,15 +25,20 @@ interface Mentor {
   availability: 'available' | 'busy' | 'limited';
   rating: number;
   mentees: number;
-  linkedIn?: string;
   image?: string;
 }
 
-// Sample Ethiopian mentors data with real LinkedIn profiles
+// Generate LinkedIn search URL from mentor's full name
+const getLinkedInSearchUrl = (fullName: string): string => {
+  return `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(fullName)}`;
+};
+
+// Sample Ethiopian mentors data - uses LinkedIn search URL with fullName
 const sampleMentors: Mentor[] = [
   {
     id: '1',
     name: 'Dr. Betelhem Dessie',
+    fullName: 'Betelhem Dessie',
     title: 'AI & Robotics Expert',
     company: 'iCog Labs',
     location: 'Addis Ababa',
@@ -42,11 +48,11 @@ const sampleMentors: Mentor[] = [
     availability: 'limited',
     rating: 4.9,
     mentees: 150,
-    linkedIn: 'https://www.linkedin.com/in/betelhem-dessie-7a7b3b1a0/',
   },
   {
     id: '2',
     name: 'Samuel Getachew',
+    fullName: 'Samuel Getachew Ethiopia',
     title: 'Software Engineering Lead',
     company: 'Safaricom Ethiopia',
     location: 'Addis Ababa',
@@ -56,11 +62,11 @@ const sampleMentors: Mentor[] = [
     availability: 'available',
     rating: 4.8,
     mentees: 45,
-    linkedIn: 'https://www.linkedin.com/in/samuel-getachew-ethiopia/',
   },
   {
     id: '3',
     name: 'Hanna Alemayehu',
+    fullName: 'Hanna Alemayehu',
     title: 'Data Scientist',
     company: 'Ethiopian Airlines',
     location: 'Addis Ababa',
@@ -70,11 +76,11 @@ const sampleMentors: Mentor[] = [
     availability: 'available',
     rating: 4.7,
     mentees: 32,
-    linkedIn: 'https://www.linkedin.com/in/hanna-alemayehu/',
   },
   {
     id: '4',
     name: 'Dawit Mekonnen',
+    fullName: 'Dawit Mekonnen Developer',
     title: 'Full Stack Developer',
     company: 'Gebeya',
     location: 'Remote / Addis Ababa',
@@ -84,11 +90,11 @@ const sampleMentors: Mentor[] = [
     availability: 'available',
     rating: 4.6,
     mentees: 28,
-    linkedIn: 'https://www.linkedin.com/in/dawit-mekonnen-dev/',
   },
   {
     id: '5',
     name: 'Meron Assefa',
+    fullName: 'Meron Assefa Designer',
     title: 'UX/UI Designer',
     company: 'Apposit',
     location: 'Addis Ababa',
@@ -98,11 +104,11 @@ const sampleMentors: Mentor[] = [
     availability: 'busy',
     rating: 4.8,
     mentees: 40,
-    linkedIn: 'https://www.linkedin.com/in/meron-assefa-designer/',
   },
   {
     id: '6',
     name: 'Abel Tesfaye',
+    fullName: 'Abel Tesfaye DevOps',
     title: 'DevOps Engineer',
     company: 'Commercial Bank of Ethiopia',
     location: 'Addis Ababa',
@@ -112,11 +118,11 @@ const sampleMentors: Mentor[] = [
     availability: 'available',
     rating: 4.5,
     mentees: 22,
-    linkedIn: 'https://www.linkedin.com/in/abel-tesfaye-devops/',
   },
   {
     id: '7',
     name: 'Tigist Haile',
+    fullName: 'Tigist Haile Product Manager',
     title: 'Product Manager',
     company: 'Ethio Telecom',
     location: 'Addis Ababa',
@@ -126,11 +132,11 @@ const sampleMentors: Mentor[] = [
     availability: 'limited',
     rating: 4.9,
     mentees: 35,
-    // No LinkedIn - will show fallback
   },
   {
     id: '8',
     name: 'Yohannes Bekele',
+    fullName: 'Yohannes Bekele Cybersecurity',
     title: 'Cybersecurity Analyst',
     company: 'National Bank of Ethiopia',
     location: 'Addis Ababa',
@@ -140,7 +146,6 @@ const sampleMentors: Mentor[] = [
     availability: 'available',
     rating: 4.6,
     mentees: 18,
-    linkedIn: 'https://www.linkedin.com/in/yohannes-bekele-security/',
   },
 ];
 
@@ -343,24 +348,15 @@ const Mentors = () => {
                 <MessageCircle className="h-4 w-4" />
                 Request Mentorship
               </button>
-              {mentor.linkedIn ? (
-                <a
-                  href={mentor.linkedIn}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2.5 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors group"
-                  title={`View ${mentor.name}'s LinkedIn profile`}
-                >
-                  <Linkedin className="h-4 w-4 text-gray-600 group-hover:text-blue-600" />
-                </a>
-              ) : (
-                <span
-                  className="p-2.5 border border-gray-100 rounded-lg bg-gray-50 cursor-not-allowed"
-                  title="LinkedIn profile not available"
-                >
-                  <Linkedin className="h-4 w-4 text-gray-300" />
-                </span>
-              )}
+              <a
+                href={getLinkedInSearchUrl(mentor.fullName)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors group"
+                title={`Search ${mentor.name} on LinkedIn`}
+              >
+                <Linkedin className="h-4 w-4 text-gray-600 group-hover:text-blue-600" />
+              </a>
             </div>
           </div>
         ))}

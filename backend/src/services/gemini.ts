@@ -192,7 +192,7 @@ class GeminiService {
   }
 
   /**
-   * Generate daily learning tasks
+   * Generate daily learning tasks - ALWAYS 60 minutes total
    */
   async generateDailyPlan(
     careerGoal: string,
@@ -202,14 +202,23 @@ class GeminiService {
   ): Promise<{
     tasks: DailyTask[];
     quizQuestions: QuizQuestion[];
+    estimatedMinutesPerDay: number;
   }> {
     try {
-      const languageName = language === 'am' ? 'Amharic' : language === 'om' ? 'Afan Oromo' : 'English';
+      const languageNames: Record<Language, string> = {
+        en: 'English',
+        am: 'Amharic',
+        om: 'Afan Oromo',
+        tg: 'Tigrigna',
+        so: 'Somali',
+      };
+      const languageName = languageNames[language] || 'English';
       
       const prompt = `Generate a personalized daily learning plan for someone pursuing ${careerGoal}.
       Their current skill level: ${skillLevel}
       Topics they've already completed: ${completedTopics.join(', ') || 'None yet'}
       
+      IMPORTANT: The total estimated time for ALL tasks combined MUST equal exactly 60 minutes.
       Respond in ${languageName}.
       
       Return a JSON object with this exact structure:
@@ -222,7 +231,8 @@ class GeminiService {
             "estimatedTime": 15,
             "type": "learn|practice|review",
             "priority": "high|medium|low",
-            "resources": ["resource link or name"]
+            "resources": ["resource link or name"],
+            "completed": false
           }
         ],
         "quizQuestions": [
@@ -237,12 +247,38 @@ class GeminiService {
         ]
       }
       
-      Generate 4-6 tasks and 3-5 quiz questions. Make tasks progressive and relevant.`;
+      Generate 4-6 tasks that add up to EXACTLY 60 minutes total. Include 3-5 quiz questions.`;
 
       const result = await this.model.generateContent(prompt);
-      return this.parseJsonResponse<{ tasks: DailyTask[]; quizQuestions: QuizQuestion[] }>(
+      const parsed = this.parseJsonResponse<{ tasks: DailyTask[]; quizQuestions: QuizQuestion[] }>(
         result.response.text()
       );
+      
+      // Ensure tasks have completed field and normalize to 60 minutes
+      const tasks = parsed.tasks.map(task => ({
+        ...task,
+        completed: task.completed ?? false,
+      }));
+      
+      // Force total time to 60 minutes by adjusting task times proportionally
+      const currentTotal = tasks.reduce((sum, t) => sum + t.estimatedTime, 0);
+      if (currentTotal !== 60 && currentTotal > 0) {
+        const ratio = 60 / currentTotal;
+        tasks.forEach(task => {
+          task.estimatedTime = Math.round(task.estimatedTime * ratio);
+        });
+        // Adjust last task to ensure exactly 60
+        const adjustedTotal = tasks.reduce((sum, t) => sum + t.estimatedTime, 0);
+        if (adjustedTotal !== 60 && tasks.length > 0) {
+          tasks[tasks.length - 1].estimatedTime += (60 - adjustedTotal);
+        }
+      }
+      
+      return {
+        tasks,
+        quizQuestions: parsed.quizQuestions,
+        estimatedMinutesPerDay: 60, // Always 60 minutes
+      };
     } catch (error) {
       logger.error('Error generating daily plan:', error);
       throw new Error('Failed to generate daily plan');

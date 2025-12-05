@@ -115,6 +115,47 @@ export const dailyPlanController = {
   }),
 
   /**
+   * Toggle task completion (check/uncheck)
+   */
+  toggleTask: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+    const userId = req.user!.uid;
+    const { taskId, completed } = req.body;
+    const planDate = new Date().toISOString().split('T')[0];
+    
+    const planRef = db.collection('users').doc(userId).collection('dailyPlans').doc(planDate);
+    const plan = await planRef.get();
+    
+    if (!plan.exists) {
+      res.status(404).json({
+        success: false,
+        error: 'Daily plan not found',
+      });
+      return;
+    }
+    
+    const tasks = plan.data()!.tasks as DailyTask[];
+    const updatedTasks = tasks.map(task => 
+      task.id === taskId ? { ...task, completed: completed } : task
+    );
+    
+    await planRef.update({ tasks: updatedTasks });
+    
+    // Record activity only when completing (not when uncompleting)
+    if (completed) {
+      await analyticsService.recordActivity(userId, {
+        tasksCompleted: 1,
+        timeSpent: tasks.find(t => t.id === taskId)?.estimatedTime || 0,
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: completed ? 'Task marked as completed' : 'Task marked as incomplete',
+      data: { tasks: updatedTasks },
+    });
+  }),
+
+  /**
    * Get plan history
    */
   getHistory: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {

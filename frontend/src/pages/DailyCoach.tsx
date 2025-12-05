@@ -47,15 +47,29 @@ const DailyCoach = () => {
     }
   };
 
-  const handleCompleteTask = async (taskId: string) => {
+  const toggleTask = async (taskId: string) => {
     try {
       setCompletingTask(taskId);
-      const response = await dailyPlanApi.completeTask(taskId);
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+      
+      // Toggle the completed state
+      const newCompletedState = !task.completed;
+      
+      // Optimistically update UI
+      setTasks(prev => prev.map(t => 
+        t.id === taskId ? { ...t, completed: newCompletedState } : t
+      ));
+      
+      // Call API to persist the change
+      const response = await dailyPlanApi.toggleTask(taskId, newCompletedState);
       if (response.success && response.data) {
         setTasks(response.data.tasks);
       }
     } catch (err) {
-      console.error('Failed to complete task:', err);
+      console.error('Failed to toggle task:', err);
+      // Revert on error
+      loadDailyPlan();
     } finally {
       setCompletingTask(null);
     }
@@ -110,6 +124,12 @@ const DailyCoach = () => {
           <p className="mt-2 text-gray-600">{t('dailyCoach.subtitle')}</p>
         </div>
         <div className="flex items-center gap-4">
+          {/* Daily Time - Always 1 hour */}
+          <div className="flex items-center gap-2 bg-blue-100 px-4 py-2 rounded-full">
+            <Clock className="h-5 w-5 text-blue-500" />
+            <span className="font-semibold text-blue-700">{t('dailyCoach.oneHour')}</span>
+            <span className="text-xs text-blue-600">({t('dailyCoach.dailyTime')})</span>
+          </div>
           <div className="flex items-center gap-2 bg-orange-100 px-4 py-2 rounded-full">
             <Flame className="h-5 w-5 text-orange-500" />
             <span className="font-semibold text-orange-700">{streak} {t('dailyCoach.streak')}</span>
@@ -174,18 +194,19 @@ const DailyCoach = () => {
                 }`}
               >
                 <div className="flex items-start gap-4">
-                  {/* Completion Toggle */}
+                  {/* Completion Toggle - Checkbox that can be checked AND unchecked */}
                   <button
-                    onClick={() => !task.completed && handleCompleteTask(task.id)}
-                    disabled={task.completed || completingTask === task.id}
+                    onClick={() => toggleTask(task.id)}
+                    disabled={completingTask === task.id}
                     className="mt-1 flex-shrink-0"
+                    title={task.completed ? t('dailyCoach.markIncomplete') : t('dailyCoach.markComplete')}
                   >
                     {completingTask === task.id ? (
                       <div className="h-6 w-6 border-2 border-primary-300 border-t-primary-600 rounded-full animate-spin" />
                     ) : task.completed ? (
-                      <CheckCircle className="h-6 w-6 text-green-500" />
+                      <CheckCircle className="h-6 w-6 text-green-500 hover:text-green-600 transition-colors cursor-pointer" />
                     ) : (
-                      <Circle className="h-6 w-6 text-gray-300 hover:text-primary-500 transition-colors" />
+                      <Circle className="h-6 w-6 text-gray-300 hover:text-primary-500 transition-colors cursor-pointer" />
                     )}
                   </button>
 

@@ -10,6 +10,9 @@ router.get('/', authMiddleware, dailyPlanController.getDailyPlan);
 // POST /api/daily-plan/complete - Mark task as completed
 router.post('/complete', authMiddleware, dailyPlanController.completeTask);
 
+// POST /api/daily-plan/toggle - Toggle task completion (check/uncheck)
+router.post('/toggle', authMiddleware, dailyPlanController.toggleTask);
+
 // GET /api/daily-plan/history - Get plan history
 router.get('/history', authMiddleware, dailyPlanController.getHistory);
 
