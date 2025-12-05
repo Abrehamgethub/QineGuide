@@ -272,6 +272,64 @@ const translations: Record<Language, Record<string, string>> = {
     'auth.signInCancelled': 'Sign-in was cancelled.',
     'auth.popupBlocked': 'Pop-up was blocked. Please allow pop-ups for this site.',
     'auth.googleSignInFailed': 'Failed to sign in with Google. Please try again.',
+
+    // Navigation Extended (Modern UI)
+    'nav.tagline': 'Your learning companion',
+    'nav.menu': 'Menu',
+    'nav.user': 'Welcome!',
+    'nav.account': 'Account',
+
+    // Tutor Extended (Modern UI)
+    'tutor.subtitle': "Ask me anything, I'm here to help!",
+    'tutor.suggestion1': 'Help me understand coding',
+    'tutor.suggestion2': 'What career suits me?',
+    'tutor.suggestion3': 'Explain this concept simply',
+    'tutor.explainSimply': 'Explain simply',
+    'tutor.giveExample': 'Give me an example',
+    'tutor.showSteps': 'Show me the steps',
+
+    // Daily Coach Extended (Modern UI)
+    'dailyCoach.motivation': "You've got this. One step at a time.",
+    'dailyCoach.aboutOneHour': 'About 1 hour',
+    'dailyCoach.dayStreak': 'day streak',
+    'dailyCoach.refresh': 'Refresh plan',
+    'dailyCoach.tasksCompleted': 'tasks completed',
+    'dailyCoach.timeSpent': 'Time invested',
+    'dailyCoach.allDone': "Amazing! You've completed today's plan!",
+    'dailyCoach.testYourself': 'Test what you learned today',
+    'dailyCoach.takeQuiz': 'Take Quiz',
+
+    // Career Extended (Modern UI)
+    'career.saved': 'Saved to your profile',
+    'career.editGoal': 'Edit goal',
+    'career.progress': 'Your progress',
+    'career.stepsComplete': 'steps',
+    'career.currentGoal': 'Currently:',
+    'career.whatGoal': 'What do you want to become?',
+    'career.popularChoices': 'Popular choices',
+    'career.skillLevel': 'Your current level',
+    'career.beginner': 'Beginner',
+    'career.intermediate': 'Intermediate',
+    'career.advanced': 'Advanced',
+    'career.creating': 'Creating your roadmap...',
+    'career.regenerate': 'Create New Roadmap',
+    'career.createRoadmap': 'Create My Roadmap',
+    'career.yourRoadmap': 'Your Learning Path',
+
+    // Mentors Extended (Modern UI)
+    'mentors.aiMatching': 'Personalized Recommendations',
+    'mentors.aiMatchingDesc': 'Based on your goals, we suggest mentors who can best guide your journey.',
+    'mentors.searchPlaceholder': 'Search by name, skill, or company...',
+    'mentors.filters': 'Filters',
+    'mentors.expertiseArea': 'Expertise Area',
+    'mentors.found': 'mentors found',
+    'mentors.noResults': 'No mentors found',
+    'mentors.tryAdjusting': 'Try adjusting your search or filters',
+
+    // Roadmap Extended (Modern UI)
+    'roadmap.startStep': 'Start This Step',
+    'roadmap.completed': 'Completed!',
+    'roadmap.markComplete': 'Mark Done',
   },
   am: {
     // Navigation
@@ -454,6 +512,70 @@ const translations: Record<Language, Record<string, string>> = {
     'career.takeQuiz': 'ፈተና ውሰድ',
     'career.talkToTutor': 'ከAI አስተማሪ ጋር አውራ',
     'career.goToDailyCoach': 'ዕለታዊ አሰልጣኝ',
+    'career.enterGoal': 'እባክዎ የስራ ግብ ያስገቡ',
+
+    // Navigation Extended (Modern UI)
+    'nav.tagline': 'የትምህርት አጋርዎ',
+    'nav.menu': 'ምናሌ',
+    'nav.user': 'እንኳን ደህና መጡ!',
+    'nav.account': 'መለያ',
+    'nav.dailyCoach': 'ዕለታዊ አሰልጣኝ',
+    'nav.mentors': 'አማካሪዎች',
+    'nav.analytics': 'ትንታኔ',
+    'nav.help': 'እርዳታ',
+
+    // Tutor Extended (Modern UI)
+    'tutor.subtitle': 'ማንኛውንም ነገር ጠይቀኝ፣ ለመርዳት እዚህ ነኝ!',
+    'tutor.suggestion1': 'ኮዲንግ እንዲገባኝ አግዘኝ',
+    'tutor.suggestion2': 'ምን ሙያ ይስማማኛል?',
+    'tutor.suggestion3': 'ይህን ፅንሰ-ሀሳብ በቀላሉ አብራራ',
+    'tutor.explainSimply': 'በቀላሉ አብራራ',
+    'tutor.giveExample': 'ምሳሌ ስጠኝ',
+    'tutor.showSteps': 'ደረጃዎቹን አሳየኝ',
+
+    // Daily Coach Extended (Modern UI)
+    'dailyCoach.motivation': 'ትችላለህ። አንድ እርምጃ በአንድ ጊዜ።',
+    'dailyCoach.aboutOneHour': 'ወደ 1 ሰዓት',
+    'dailyCoach.dayStreak': 'ቀን ተከታታይ',
+    'dailyCoach.refresh': 'እቅድ አድስ',
+    'dailyCoach.tasksCompleted': 'ስራዎች ተጠናቀቁ',
+    'dailyCoach.timeSpent': 'የወጣ ጊዜ',
+    'dailyCoach.allDone': 'ድንቅ! የዛሬውን እቅድ ጨርሰሃል!',
+    'dailyCoach.testYourself': 'ዛሬ የተማርከውን ፈትን',
+    'dailyCoach.takeQuiz': 'ፈተና ውሰድ',
+
+    // Career Extended (Modern UI)
+    'career.saved': 'በመገለጫዎ ተቀምጧል',
+    'career.editGoal': 'ግብ አርትዕ',
+    'career.progress': 'እድገትዎ',
+    'career.stepsComplete': 'ደረጃዎች',
+    'career.currentGoal': 'አሁን ያለው:',
+    'career.whatGoal': 'ምን መሆን ይፈልጋሉ?',
+    'career.popularChoices': 'ተወዳጅ ምርጫዎች',
+    'career.skillLevel': 'አሁን ያለዎት ደረጃ',
+    'career.beginner': 'ጀማሪ',
+    'career.intermediate': 'መካከለኛ',
+    'career.advanced': 'የላቀ',
+    'career.creating': 'መንገድዎን በመፍጠር ላይ...',
+    'career.regenerate': 'አዲስ መንገድ ፍጠር',
+    'career.createRoadmap': 'መንገዴን ፍጠር',
+    'career.yourRoadmap': 'የትምህርት መንገድዎ',
+
+    // Mentors Extended (Modern UI)
+    'mentors.aiMatching': 'ግላዊ ምክሮች',
+    'mentors.aiMatchingDesc': 'በግቦችዎ ላይ በመመርኮዝ ጉዞዎን በተሻለ ሁኔታ ሊመሩ የሚችሉ አማካሪዎችን እንጠቁማለን።',
+    'mentors.searchPlaceholder': 'በስም፣ ክህሎት ወይም ኩባንያ ፈልግ...',
+    'mentors.filters': 'ማጣሪያዎች',
+    'mentors.expertiseArea': 'የሙያ መስክ',
+    'mentors.found': 'አማካሪዎች ተገኝተዋል',
+    'mentors.noResults': 'አማካሪ አልተገኘም',
+    'mentors.tryAdjusting': 'ፍለጋዎን ወይም ማጣሪያዎችን ያስተካክሉ',
+    'mentors.viewProfile': 'LinkedIn መገለጫ ይመልከቱ',
+
+    // Roadmap Extended (Modern UI)
+    'roadmap.startStep': 'ይህን ደረጃ ጀምር',
+    'roadmap.completed': 'ተጠናቋል!',
+    'roadmap.markComplete': 'እንደተጠናቀቀ ምልክት አድርግ',
   },
   om: {
     // Navigation
