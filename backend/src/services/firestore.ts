@@ -311,6 +311,64 @@ class FirestoreService {
     await this.upsertUserProfile(uid, { languagePreference: language });
     logger.info(`Updated language preference to ${language} for user ${uid}`);
   }
+
+  // ==================== Career Goal Data ====================
+
+  /**
+   * Save career goal and roadmap data to /users/{uid}/careerGoal/data
+   */
+  async saveCareerGoalData(uid: string, data: {
+    careerGoal: string;
+    stages: RoadmapStage[];
+    skillLevel: string;
+    language?: Language;
+    updatedAt: Date;
+  }): Promise<void> {
+    const db = getFirestore();
+    const careerGoalRef = db
+      .collection(COLLECTIONS.users)
+      .doc(uid)
+      .collection('careerGoal')
+      .doc('data');
+
+    await careerGoalRef.set({
+      ...data,
+      createdAt: new Date(),
+    }, { merge: true });
+
+    logger.info(`Saved career goal data for user ${uid}: ${data.careerGoal}`);
+  }
+
+  /**
+   * Get career goal data for a user
+   */
+  async getCareerGoalData(uid: string): Promise<{
+    careerGoal: string;
+    stages: RoadmapStage[];
+    skillLevel: string;
+    language?: Language;
+    updatedAt: Date;
+  } | null> {
+    const db = getFirestore();
+    const doc = await db
+      .collection(COLLECTIONS.users)
+      .doc(uid)
+      .collection('careerGoal')
+      .doc('data')
+      .get();
+
+    if (!doc.exists) {
+      return null;
+    }
+
+    return doc.data() as {
+      careerGoal: string;
+      stages: RoadmapStage[];
+      skillLevel: string;
+      language?: Language;
+      updatedAt: Date;
+    };
+  }
 }
 
 // Export singleton instance

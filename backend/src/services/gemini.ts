@@ -11,13 +11,84 @@ import {
   GeminiSkillsResponse,
 } from '../types';
 
+// Error codes for frontend handling
+export const AI_ERROR_CODES = {
+  AI_NO_ANSWER: 'AI_NO_ANSWER',
+  AI_QUOTA: 'AI_QUOTA',
+  AI_TIMEOUT: 'AI_TIMEOUT',
+  AI_MALFORMED_RESPONSE: 'AI_MALFORMED_RESPONSE',
+  AI_API_KEY_MISSING: 'AI_API_KEY_MISSING',
+  LLM_ERROR: 'LLM_ERROR',
+} as const;
+
+export class AIError extends Error {
+  code: string;
+  constructor(message: string, code: string) {
+    super(message);
+    this.code = code;
+    this.name = 'AIError';
+  }
+}
+
 class GeminiService {
   private genAI: GoogleGenerativeAI;
   private model: GenerativeModel;
+  private readonly MAX_RETRIES = 3;
+  private readonly REQUEST_TIMEOUT = 20000; // 20 seconds
 
   constructor() {
-    this.genAI = new GoogleGenerativeAI(config.gemini.apiKey);
+    if (!config.gemini.apiKey) {
+      logger.error('Gemini API key is missing!');
+    }
+    this.genAI = new GoogleGenerativeAI(config.gemini.apiKey || '');
     this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  }
+
+  /**
+   * Execute with retry and exponential backoff
+   */
+  private async executeWithRetry<T>(
+    operation: () => Promise<T>,
+    operationName: string
+  ): Promise<T> {
+    let lastError: Error | null = null;
+    
+    for (let attempt = 1; attempt <= this.MAX_RETRIES; attempt++) {
+      try {
+        // Add timeout wrapper
+        const result = await Promise.race([
+          operation(),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new AIError('Request timed out', AI_ERROR_CODES.AI_TIMEOUT)), this.REQUEST_TIMEOUT)
+          ),
+        ]);
+        return result;
+      } catch (error: unknown) {
+        lastError = error as Error;
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        
+        logger.warn(`${operationName} attempt ${attempt}/${this.MAX_RETRIES} failed:`, errorMessage);
+        
+        // Check for quota errors
+        if (errorMessage.includes('quota') || errorMessage.includes('429')) {
+          throw new AIError('AI service quota exceeded. Please try again later.', AI_ERROR_CODES.AI_QUOTA);
+        }
+        
+        // Don't retry on timeout - throw immediately
+        if (error instanceof AIError && error.code === AI_ERROR_CODES.AI_TIMEOUT) {
+          throw error;
+        }
+        
+        // Exponential backoff before retry
+        if (attempt < this.MAX_RETRIES) {
+          const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+          logger.info(`Retrying ${operationName} in ${delay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      }
+    }
+    
+    throw lastError || new AIError('Operation failed after retries', AI_ERROR_CODES.LLM_ERROR);
   }
 
   /**
@@ -40,31 +111,65 @@ class GeminiService {
       return JSON.parse(cleanedText) as T;
     } catch (error) {
       logger.error('Failed to parse Gemini JSON response:', { text: cleanedText, error });
-      throw new Error('Failed to parse AI response');
+      throw new AIError('Failed to parse AI response', AI_ERROR_CODES.AI_MALFORMED_RESPONSE);
     }
   }
 
   /**
-   * Generate a career roadmap
+   * Generate a career roadmap with retry and timeout
    */
   async generateRoadmap(
     careerGoal: string,
-    skillLevel?: string
+    skillLevel?: string,
+    options?: { age?: number; gender?: string; language?: Language }
   ): Promise<RoadmapStage[]> {
-    try {
-      const prompt = PROMPTS.roadmap(careerGoal, skillLevel);
+    // Validate API key
+    if (!config.gemini.apiKey) {
+      throw new AIError('AI service not configured', AI_ERROR_CODES.AI_API_KEY_MISSING);
+    }
+
+    return this.executeWithRetry(async () => {
+      const languageNames: Record<Language, string> = {
+        en: 'English',
+        am: 'Amharic',
+        om: 'Afan Oromo',
+        tg: 'Tigrigna',
+        so: 'Somali',
+      };
+      
+      const lang = options?.language || 'en';
+      const languageName = languageNames[lang] || 'English';
+      
+      // Enhanced prompt with demographic info
+      let prompt = PROMPTS.roadmap(careerGoal, skillLevel);
+      if (options?.age || options?.gender || options?.language) {
+        prompt = `${prompt}\n\nAdditional context:
+        ${options.age ? `- User age: ${options.age}` : ''}
+        ${options.gender ? `- User gender: ${options.gender}` : ''}
+        - Respond in ${languageName}
+        - Consider cultural context relevant to Ethiopian youth.`;
+      }
+      
+      logger.info('Generating roadmap for:', { careerGoal, skillLevel, options });
+      
       const result = await this.model.generateContent(prompt);
       const response = result.response;
       const text = response.text();
 
-      logger.debug('Gemini roadmap response:', { text });
+      if (!text || text.trim().length === 0) {
+        throw new AIError('AI returned empty response', AI_ERROR_CODES.AI_NO_ANSWER);
+      }
+
+      logger.debug('Gemini roadmap response received', { length: text.length });
 
       const parsed = this.parseJsonResponse<GeminiRoadmapResponse>(text);
+      
+      if (!parsed.stages || !Array.isArray(parsed.stages) || parsed.stages.length === 0) {
+        throw new AIError('Invalid roadmap structure from AI', AI_ERROR_CODES.AI_MALFORMED_RESPONSE);
+      }
+      
       return parsed.stages;
-    } catch (error) {
-      logger.error('Error generating roadmap:', error);
-      throw new Error('Failed to generate career roadmap');
-    }
+    }, 'generateRoadmap');
   }
 
   /**
@@ -139,21 +244,44 @@ class GeminiService {
   }
 
   /**
-   * General chat completion for the AI tutor
+   * General chat completion for the AI tutor with retry and error handling
    */
   async chat(message: string, language: Language = 'en'): Promise<string> {
-    try {
-      const systemPrompt = `You are TenaAI, a friendly AI tutor helping Ethiopian youth learn and grow in their careers. 
-      Respond in ${language === 'am' ? 'Amharic' : language === 'om' ? 'Afan Oromo' : 'English'}.
-      Be encouraging, patient, and provide practical advice relevant to the Ethiopian context.`;
+    // Validate API key
+    if (!config.gemini.apiKey) {
+      throw new AIError('AI service not configured', AI_ERROR_CODES.AI_API_KEY_MISSING);
+    }
+    
+    // Validate input
+    if (!message || message.trim().length === 0) {
+      throw new AIError('Message cannot be empty', AI_ERROR_CODES.AI_NO_ANSWER);
+    }
+
+    return this.executeWithRetry(async () => {
+      const languageNames: Record<Language, string> = {
+        en: 'English',
+        am: 'Amharic',
+        om: 'Afan Oromo',
+        tg: 'Tigrigna',
+        so: 'Somali',
+      };
+      const languageName = languageNames[language] || 'English';
+      
+      const systemPrompt = `You are QineGuide AI Tutor, a friendly and knowledgeable AI mentor helping Ethiopian youth learn and grow in their careers. 
+      You MUST respond in ${languageName}.
+      Be encouraging, patient, and provide practical advice relevant to the Ethiopian context.
+      Keep responses concise but helpful.`;
 
       const result = await this.model.generateContent(`${systemPrompt}\n\nUser: ${message}`);
       const response = result.response;
-      return response.text();
-    } catch (error) {
-      logger.error('Error in chat:', error);
-      throw new Error('Failed to generate chat response');
-    }
+      const text = response.text();
+      
+      if (!text || text.trim().length === 0) {
+        throw new AIError('AI returned empty response', AI_ERROR_CODES.AI_NO_ANSWER);
+      }
+      
+      return text;
+    }, 'chat');
   }
 
   /**

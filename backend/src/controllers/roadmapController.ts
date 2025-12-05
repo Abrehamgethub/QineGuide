@@ -1,8 +1,32 @@
 import { Response } from 'express';
-import { geminiService } from '../services/gemini';
+import { geminiService, AIError, AI_ERROR_CODES } from '../services/gemini';
 import { firestoreService } from '../services/firestore';
 import { logger } from '../services/logger';
 import { AuthenticatedRequest, RoadmapRequest, ApiResponse, Roadmap } from '../types';
+
+// Helper to map AI errors to structured responses
+const mapAIError = (error: unknown): { message: string; code: string; status: number } => {
+  if (error instanceof AIError) {
+    const statusMap: Record<string, number> = {
+      [AI_ERROR_CODES.AI_TIMEOUT]: 504,
+      [AI_ERROR_CODES.AI_QUOTA]: 429,
+      [AI_ERROR_CODES.AI_API_KEY_MISSING]: 503,
+      [AI_ERROR_CODES.AI_NO_ANSWER]: 500,
+      [AI_ERROR_CODES.AI_MALFORMED_RESPONSE]: 500,
+      [AI_ERROR_CODES.LLM_ERROR]: 500,
+    };
+    return {
+      message: error.message,
+      code: error.code,
+      status: statusMap[error.code] || 500,
+    };
+  }
+  return {
+    message: 'Failed to generate roadmap. Please try again.',
+    code: AI_ERROR_CODES.LLM_ERROR,
+    status: 500,
+  };
+};
 
 export const roadmapController = {
   /**
@@ -10,7 +34,7 @@ export const roadmapController = {
    */
   async generate(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
-      const { careerGoal, currentSkillLevel, preferredLanguage } = req.body as RoadmapRequest;
+      const { careerGoal, currentSkillLevel, preferredLanguage, age, gender } = req.body as RoadmapRequest & { age?: number; gender?: string };
       const uid = req.user?.uid;
 
       // Validate input
@@ -18,44 +42,39 @@ export const roadmapController = {
         res.status(400).json({
           success: false,
           error: 'Career goal is required and must be at least 3 characters',
+          code: 'INVALID_INPUT',
         });
         return;
       }
 
-      logger.info(`Generating roadmap for career: ${careerGoal}`, { uid });
+      logger.info(`Generating roadmap for career: ${careerGoal}`, { uid, age, gender, language: preferredLanguage });
 
-      // Generate roadmap using Gemini with safe error handling
-      let stages;
-      try {
-        stages = await geminiService.generateRoadmap(careerGoal.trim(), currentSkillLevel || 'beginner');
-      } catch (genError) {
-        logger.error('Gemini generation error:', genError);
-        res.status(500).json({
-          success: false,
-          error: 'AI service temporarily unavailable. Please try again.',
-        });
-        return;
-      }
-
-      // Validate generated stages
-      if (!stages || !Array.isArray(stages) || stages.length === 0) {
-        res.status(500).json({
-          success: false,
-          error: 'Failed to generate valid roadmap stages. Please try again.',
-        });
-        return;
-      }
+      // Generate roadmap using Gemini with retry, timeout, and demographic options
+      const stages = await geminiService.generateRoadmap(
+        careerGoal.trim(), 
+        currentSkillLevel || 'beginner',
+        { age, gender, language: preferredLanguage }
+      );
 
       let savedRoadmap: Roadmap | null = null;
 
-      // Save to Firestore if user is authenticated
+      // Save to Firestore if user is authenticated - use correct path /users/{uid}/careerGoal/data
       if (uid) {
-        savedRoadmap = await firestoreService.saveRoadmap(uid, careerGoal, stages);
+        savedRoadmap = await firestoreService.saveRoadmap(uid, careerGoal.trim(), stages);
 
-        // Update user's career goals
+        // Update user's career goals and save roadmap data
         await firestoreService.upsertUserProfile(uid, {
-          careerGoals: [careerGoal],
+          careerGoals: [careerGoal.trim()],
           languagePreference: preferredLanguage,
+        });
+        
+        // Also save to /users/{uid}/careerGoal/data path
+        await firestoreService.saveCareerGoalData(uid, {
+          careerGoal: careerGoal.trim(),
+          stages,
+          skillLevel: currentSkillLevel || 'beginner',
+          language: preferredLanguage,
+          updatedAt: new Date(),
         });
       }
 
@@ -71,9 +90,11 @@ export const roadmapController = {
       res.status(200).json(response);
     } catch (error) {
       logger.error('Error generating roadmap:', error);
-      res.status(500).json({
+      const errorInfo = mapAIError(error);
+      res.status(errorInfo.status).json({
         success: false,
-        error: 'Failed to generate career roadmap',
+        error: errorInfo.message,
+        code: errorInfo.code,
       });
     }
   },

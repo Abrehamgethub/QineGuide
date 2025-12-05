@@ -1,9 +1,33 @@
 import { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { geminiService } from '../services/gemini';
+import { geminiService, AIError, AI_ERROR_CODES } from '../services/gemini';
 import { firestoreService } from '../services/firestore';
 import { logger } from '../services/logger';
 import { AuthenticatedRequest, ExplainRequest, Language } from '../types';
+
+// Helper to map AI errors to structured responses
+const mapAIError = (error: unknown): { message: string; code: string; status: number } => {
+  if (error instanceof AIError) {
+    const statusMap: Record<string, number> = {
+      [AI_ERROR_CODES.AI_TIMEOUT]: 504,
+      [AI_ERROR_CODES.AI_QUOTA]: 429,
+      [AI_ERROR_CODES.AI_API_KEY_MISSING]: 503,
+      [AI_ERROR_CODES.AI_NO_ANSWER]: 500,
+      [AI_ERROR_CODES.AI_MALFORMED_RESPONSE]: 500,
+      [AI_ERROR_CODES.LLM_ERROR]: 500,
+    };
+    return {
+      message: error.message,
+      code: error.code,
+      status: statusMap[error.code] || 500,
+    };
+  }
+  return {
+    message: 'An unexpected error occurred',
+    code: AI_ERROR_CODES.LLM_ERROR,
+    status: 500,
+  };
+};
 
 export const tutorController = {
   /**
@@ -70,19 +94,29 @@ export const tutorController = {
       };
       const uid = req.user?.uid;
 
-      logger.info(`Chat message received`, { uid, language });
+      // Validate input
+      if (!message || message.trim().length === 0) {
+        res.status(400).json({
+          success: false,
+          error: 'Message cannot be empty',
+          code: 'INVALID_INPUT',
+        });
+        return;
+      }
+
+      logger.info(`Chat message received`, { uid, language, messageLength: message.length });
 
       // Generate response using Gemini
-      const response = await geminiService.chat(message, language);
+      const response = await geminiService.chat(message.trim(), language);
 
       // Save to chat history if user is authenticated
       if (uid) {
         const chatHistoryId = historyId || uuidv4();
 
-        // Save user message
+        // Save user message - using correct Firestore path
         await firestoreService.saveChatMessage(uid, chatHistoryId, {
           role: 'user',
-          content: message,
+          content: message.trim(),
           language,
         });
 
@@ -111,9 +145,11 @@ export const tutorController = {
       });
     } catch (error) {
       logger.error('Error in chat:', error);
-      res.status(500).json({
+      const errorInfo = mapAIError(error);
+      res.status(errorInfo.status).json({
         success: false,
-        error: 'Failed to generate response',
+        error: errorInfo.message,
+        code: errorInfo.code,
       });
     }
   },

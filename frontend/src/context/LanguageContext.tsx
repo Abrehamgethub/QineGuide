@@ -60,6 +60,11 @@ const translations: Record<Language, Record<string, string>> = {
     'tutor.send': 'Send',
     'tutor.speak': 'Speak',
     'tutor.listening': 'Listening...',
+    'tutor.errorGeneric': 'Service temporarily unavailable. Please try again.',
+    'tutor.errorTimeout': 'Request timed out. Please try again.',
+    'tutor.errorQuota': 'Service is busy. Please try again in a moment.',
+    'tutor.errorNoAnswer': 'Could not generate a response. Please rephrase your question.',
+    'tutor.retry': 'Retry',
 
     // Opportunities
     'opportunities.title': 'Opportunities For You',

@@ -111,12 +111,26 @@ const Tutor = () => {
           speak(response.data.response);
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to get response:', error);
+      
+      // Map error codes to user-friendly messages
+      const errorResponse = error as { response?: { data?: { code?: string; error?: string } } };
+      const errorCode = errorResponse?.response?.data?.code;
+      
+      let userMessage = t('tutor.errorGeneric');
+      if (errorCode === 'AI_TIMEOUT') {
+        userMessage = t('tutor.errorTimeout');
+      } else if (errorCode === 'AI_QUOTA') {
+        userMessage = t('tutor.errorQuota');
+      } else if (errorCode === 'AI_NO_ANSWER') {
+        userMessage = t('tutor.errorNoAnswer');
+      }
+      
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.',
+        content: userMessage,
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, errorMessage]);
