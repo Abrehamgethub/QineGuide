@@ -84,7 +84,7 @@ const Layout = () => {
             aria-label="QineGuide Home"
           >
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-xl shadow-button">
-              ቕኔ
+              ቅኔ
             </div>
             <div>
               <span className="text-xl font-bold text-text-primary">QineGuide</span>
@@ -136,7 +136,7 @@ const Layout = () => {
       <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between bg-white/90 backdrop-blur-lg border-b border-surface-200 px-4 md:hidden">
         <Link to="/" className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-lg shadow-button">
-            ቕኔ
+            ቅኔ
           </div>
           <span className="text-lg font-bold text-text-primary">QineGuide</span>
         </Link>

@@ -3,7 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { dailyPlanApi, DailyTask, QuizQuestion } from '../api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import QuizModal from '../components/QuizModal';
-import { fixURL } from '../components/ExternalLink';
+import { fixURL, getDisplayName } from '../components/ExternalLink';
 import {
   Calendar,
   Circle,
@@ -13,7 +13,7 @@ import {
   Code,
   RefreshCw,
   Play,
-  ExternalLink,
+  ExternalLink as ExternalLinkIcon,
   Trophy,
   Sparkles,
   Check,
@@ -270,25 +270,24 @@ const DailyCoach = () => {
                     {/* Resources */}
                     {task.resources.length > 0 && !task.completed && (
                       <div className="mt-3 pt-3 border-t border-surface-100 flex flex-wrap gap-2">
-                        {task.resources.slice(0, 2).map((resource, i) => {
+                        {task.resources.slice(0, 3).map((resource, i) => {
                           const fixedUrl = fixURL(resource);
                           const isValidUrl = /^https?:\/\//i.test(fixedUrl);
                           const href = isValidUrl 
                             ? fixedUrl 
                             : `https://www.google.com/search?q=${encodeURIComponent(resource)}`;
                           
-                          // Extract display name from URL or use resource text
-                          let displayText = resource;
-                          if (isValidUrl) {
-                            try {
-                              const urlObj = new URL(fixedUrl);
-                              displayText = urlObj.hostname.replace(/^www\./, '');
-                            } catch {
-                              displayText = resource.length > 25 ? resource.slice(0, 25) + '...' : resource;
-                            }
-                          } else {
-                            displayText = resource.length > 25 ? resource.slice(0, 25) + '...' : resource;
-                          }
+                          // Get clean display name
+                          const displayText = isValidUrl 
+                            ? getDisplayName(fixedUrl, 'Visit Resource')
+                            : (resource.length > 25 ? resource.slice(0, 25) + '...' : resource);
+                          
+                          const handleLinkClick = (e: React.MouseEvent) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            // Force open in new tab - bypasses React Router completely
+                            window.open(href, '_blank', 'noopener,noreferrer');
+                          };
                           
                           return (
                             <a
@@ -296,11 +295,11 @@ const DailyCoach = () => {
                               href={href}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs text-primary-500 hover:text-primary-600 flex items-center gap-1.5 bg-primary-50 px-3 py-1.5 rounded-full transition-colors"
-                              onClick={(e) => e.stopPropagation()}
+                              className="text-xs text-primary-600 hover:text-primary-700 flex items-center gap-1.5 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-full transition-all font-medium"
+                              onClick={handleLinkClick}
                               title={fixedUrl || resource}
                             >
-                              <ExternalLink className="h-3 w-3" />
+                              <ExternalLinkIcon className="h-3 w-3" />
                               {displayText}
                             </a>
                           );

@@ -88,8 +88,13 @@ const OpportunityCard = ({
         href={fixURL(url)}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-4 flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700"
-        onClick={(e) => e.stopPropagation()}
+        className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-4 py-2 rounded-xl transition-all"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          // Force open in new tab - bypasses React Router completely
+          window.open(fixURL(url), '_blank', 'noopener,noreferrer');
+        }}
       >
         <span>View Opportunity</span>
         <ExternalLink className="h-4 w-4" />

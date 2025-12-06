@@ -1,8 +1,8 @@
-import { ChevronDown, ChevronUp, BookOpen, Clock, Zap, Check, Play, ExternalLink } from 'lucide-react';
+import { ChevronDown, ChevronUp, BookOpen, Clock, Zap, Check, Play, ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { fixURL } from './ExternalLink';
+import { fixURL, getDisplayName } from './ExternalLink';
 
 interface RoadmapStageProps {
   stageNumber: number;
@@ -133,15 +133,15 @@ const RoadmapStageCard = ({
             ))}
           </div>
 
-          {/* Resources */}
+          {/* Resources - Clean Grid Layout */}
           {resources.length > 0 && (
-            <div className="mt-4">
+            <div className="mt-5">
               <h4 className="flex items-center gap-2 text-sm font-medium text-text-primary mb-3">
                 <BookOpen className="h-4 w-4 text-primary-500" />
                 {t('roadmap.resources') || 'Learning Resources'}
               </h4>
-              <div className="space-y-2">
-                {resources.slice(0, 3).map((resource, index) => {
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {resources.slice(0, 6).map((resource, index) => {
                   // Use fixURL utility to properly sanitize URLs
                   const fixedUrl = fixURL(resource);
                   const isExternalUrl = /^https?:\/\//i.test(fixedUrl);
@@ -151,17 +151,17 @@ const RoadmapStageCard = ({
                     ? fixedUrl 
                     : `https://www.google.com/search?q=${encodeURIComponent(resource)}`;
                   
-                  // Extract display name from URL or use resource text
-                  let displayText = resource;
-                  if (isExternalUrl) {
-                    try {
-                      const urlObj = new URL(fixedUrl);
-                      // Show domain name (e.g., "coursera.org" or "freecodecamp.org")
-                      displayText = urlObj.hostname.replace(/^www\./, '');
-                    } catch {
-                      displayText = t('roadmap.visitResource') || 'Visit Resource';
-                    }
-                  }
+                  // Get clean display name
+                  const displayText = isExternalUrl 
+                    ? getDisplayName(fixedUrl, t('roadmap.visitResource') || 'Visit Resource')
+                    : (resource.length > 30 ? resource.slice(0, 30) + '...' : resource);
+                  
+                  const handleLinkClick = (e: React.MouseEvent) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Force open in new tab - bypasses React Router completely
+                    window.open(href, '_blank', 'noopener,noreferrer');
+                  };
                   
                   return (
                     <a
@@ -169,12 +169,12 @@ const RoadmapStageCard = ({
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-2 rounded-xl transition-colors"
-                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-2.5 rounded-xl transition-all duration-200 hover:shadow-sm"
+                      onClick={handleLinkClick}
                       title={isExternalUrl ? fixedUrl : resource}
                     >
-                      <ExternalLink className="h-3.5 w-3.5 flex-shrink-0" />
-                      <span className="truncate">{displayText}</span>
+                      <ExternalLinkIcon className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate font-medium">{displayText}</span>
                     </a>
                   );
                 })}
