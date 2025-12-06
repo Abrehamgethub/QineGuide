@@ -74,11 +74,14 @@ const Dashboard = () => {
       {/* Header with user greeting */}
       <header className="bg-white border-b border-surface-200 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold shadow-button">
-              Q
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-xl shadow-lg group-hover:shadow-xl transition-all duration-300">
+              ቅኔ
             </div>
-            <span className="text-xl font-bold text-text-primary">QineGuide</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-text-primary">QineGuide</span>
+              <span className="text-[10px] text-text-muted -mt-1 hidden sm:block">Where Wisdom Guides</span>
+            </div>
           </Link>
           
           {/* Username in top-right */}

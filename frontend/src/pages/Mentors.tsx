@@ -461,15 +461,18 @@ const Mentors = () => {
 
             {/* LinkedIn Button - Aligned at bottom */}
             <div className="mt-4 pt-4 border-t border-surface-100">
-              <a
-                href={getLinkedInSearchUrl(mentor.fullName)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0A66C2] text-white rounded-xl hover:bg-[#004182] transition-all duration-200 font-medium text-sm"
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  // Force open LinkedIn search in new tab
+                  window.open(getLinkedInSearchUrl(mentor.fullName), '_blank', 'noopener,noreferrer');
+                }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0A66C2] text-white rounded-xl hover:bg-[#004182] transition-all duration-200 font-medium text-sm cursor-pointer"
               >
                 <Linkedin className="h-4 w-4" />
-                {t('mentors.viewProfile') || 'View LinkedIn Profile'}
-              </a>
+                {t('mentors.findOnLinkedIn') || 'Find on LinkedIn'}
+              </button>
             </div>
           </div>
         ))}

@@ -52,12 +52,15 @@ const Landing = () => {
       {/* Header */}
       <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-600 text-white font-bold text-lg">
-              Q
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-xl shadow-lg group-hover:shadow-xl transition-all duration-300">
+              ቅኔ
             </div>
-            <span className="text-xl font-bold text-gray-900">QineGuide</span>
-          </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-gray-900">QineGuide</span>
+              <span className="text-[10px] text-gray-500 -mt-1 hidden sm:block">Where Wisdom Guides</span>
+            </div>
+          </Link>
           <nav className="flex items-center gap-4">
             {user ? (
               <Link
@@ -180,11 +183,11 @@ const Landing = () => {
       {/* Footer */}
       <footer className="border-t border-gray-100 bg-white py-8">
         <div className="mx-auto max-w-6xl px-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 text-white font-bold">
-              Q
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-lg">
+              ቅኔ
             </div>
-            <span className="font-bold text-gray-900">QineGuide</span>
+            <span className="font-bold text-gray-900 text-lg">QineGuide</span>
           </div>
           <p className="text-sm text-gray-500">
             Where understanding meets purpose, guidance becomes possibility
