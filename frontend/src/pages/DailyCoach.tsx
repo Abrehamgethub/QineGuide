@@ -277,6 +277,19 @@ const DailyCoach = () => {
                             ? fixedUrl 
                             : `https://www.google.com/search?q=${encodeURIComponent(resource)}`;
                           
+                          // Extract display name from URL or use resource text
+                          let displayText = resource;
+                          if (isValidUrl) {
+                            try {
+                              const urlObj = new URL(fixedUrl);
+                              displayText = urlObj.hostname.replace(/^www\./, '');
+                            } catch {
+                              displayText = resource.length > 25 ? resource.slice(0, 25) + '...' : resource;
+                            }
+                          } else {
+                            displayText = resource.length > 25 ? resource.slice(0, 25) + '...' : resource;
+                          }
+                          
                           return (
                             <a
                               key={i}
@@ -285,9 +298,10 @@ const DailyCoach = () => {
                               rel="noopener noreferrer"
                               className="text-xs text-primary-500 hover:text-primary-600 flex items-center gap-1.5 bg-primary-50 px-3 py-1.5 rounded-full transition-colors"
                               onClick={(e) => e.stopPropagation()}
+                              title={fixedUrl || resource}
                             >
                               <ExternalLink className="h-3 w-3" />
-                              {resource.length > 25 ? resource.slice(0, 25) + '...' : resource}
+                              {displayText}
                             </a>
                           );
                         })}

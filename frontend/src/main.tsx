@@ -3,6 +3,15 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 
+// Global safeguard: Prevent React Router from intercepting external links
+document.addEventListener('click', (e) => {
+  const anchor = (e.target as HTMLElement).closest('a');
+  if (anchor && anchor.target === '_blank') {
+    // Stop propagation to prevent React Router interception
+    e.stopPropagation();
+  }
+});
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />

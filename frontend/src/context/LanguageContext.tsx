@@ -50,6 +50,7 @@ const translations: Record<Language, Record<string, string>> = {
     'roadmap.empty': 'Set a career goal to see your roadmap',
     'roadmap.stage': 'Stage',
     'roadmap.resources': 'Resources',
+    'roadmap.visitResource': 'Visit Resource',
     'roadmap.save': 'Save Roadmap',
     'roadmap.generateError': 'Failed to generate roadmap. Please try again.',
     'roadmap.generating': 'Generating your personalized roadmap...',
@@ -382,6 +383,7 @@ const translations: Record<Language, Record<string, string>> = {
     'roadmap.empty': 'የስራ ግብ ያስቀምጡ መንገድዎን ለማየት',
     'roadmap.stage': 'ደረጃ',
     'roadmap.resources': 'ግብዓቶች',
+    'roadmap.visitResource': 'ግብዓት ጎብኝ',
     'roadmap.save': 'መንገድ አስቀምጥ',
 
     // Tutor
@@ -628,6 +630,7 @@ const translations: Record<Language, Record<string, string>> = {
     'roadmap.empty': 'Kaayyoo hojii galchi karaa kee ilaaluuf',
     'roadmap.stage': 'Sadarkaa',
     'roadmap.resources': 'Qabeenya',
+    'roadmap.visitResource': 'Qabeenya Ilaali',
     'roadmap.save': 'Karaa Olkaa\'i',
 
     // Tutor
@@ -810,6 +813,7 @@ const translations: Record<Language, Record<string, string>> = {
     'roadmap.empty': 'መገድኻ ንምርኣይ ዕላማ ስራሕ ኣእቱ',
     'roadmap.stage': 'ደረጃ',
     'roadmap.resources': 'ጸጋታት',
+    'roadmap.visitResource': 'ጸጋ ብጻሕ',
     'roadmap.save': 'መገዲ ዓቅብ',
 
     // Tutor
@@ -992,6 +996,7 @@ const translations: Record<Language, Record<string, string>> = {
     'roadmap.empty': 'Geli hadafka shaqada si aad u aragto dariiqdaada',
     'roadmap.stage': 'Heer',
     'roadmap.resources': 'Ilaha',
+    'roadmap.visitResource': 'Booqo Ilaha',
     'roadmap.save': 'Kaydi Dariiqa',
 
     // Tutor

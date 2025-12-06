@@ -151,10 +151,17 @@ const RoadmapStageCard = ({
                     ? fixedUrl 
                     : `https://www.google.com/search?q=${encodeURIComponent(resource)}`;
                   
-                  // Display text
-                  const displayText = isExternalUrl 
-                    ? (t('roadmap.visitResource') || 'Visit resource')
-                    : resource;
+                  // Extract display name from URL or use resource text
+                  let displayText = resource;
+                  if (isExternalUrl) {
+                    try {
+                      const urlObj = new URL(fixedUrl);
+                      // Show domain name (e.g., "coursera.org" or "freecodecamp.org")
+                      displayText = urlObj.hostname.replace(/^www\./, '');
+                    } catch {
+                      displayText = t('roadmap.visitResource') || 'Visit Resource';
+                    }
+                  }
                   
                   return (
                     <a
@@ -167,7 +174,7 @@ const RoadmapStageCard = ({
                       title={isExternalUrl ? fixedUrl : resource}
                     >
                       <ExternalLink className="h-3.5 w-3.5 flex-shrink-0" />
-                      <span className="truncate">{isExternalUrl ? displayText : resource}</span>
+                      <span className="truncate">{displayText}</span>
                     </a>
                   );
                 })}

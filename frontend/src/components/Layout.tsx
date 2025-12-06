@@ -50,17 +50,41 @@ const Layout = () => {
 
   return (
     <div className="min-h-screen bg-surface-50">
+      {/* Desktop Header - Top Bar with Language & Logout */}
+      <header className="fixed top-0 left-72 right-0 z-30 hidden h-16 items-center justify-between bg-white/90 backdrop-blur-lg border-b border-surface-200 px-6 md:flex">
+        <div className="flex items-center gap-2">
+          {/* Page title can go here if needed */}
+        </div>
+        <div className="flex items-center gap-4">
+          {/* User name */}
+          <span className="text-sm font-medium text-text-secondary">
+            {user?.displayName || user?.email?.split('@')[0] || ''}
+          </span>
+          {/* Language Selector */}
+          <LanguagePillSelector variant="header" />
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-text-secondary hover:text-red-600 hover:bg-red-50 transition-all duration-200"
+            title={t('nav.logout') || 'Sign out'}
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="hidden lg:inline">{t('nav.logout') || 'Sign out'}</span>
+          </button>
+        </div>
+      </header>
+
       {/* Desktop Sidebar - Modern, Clean Design */}
       <aside className="fixed left-0 top-0 z-40 hidden h-screen w-72 bg-white/80 backdrop-blur-xl border-r border-surface-200 md:block">
         <div className="flex h-full flex-col">
-          {/* Logo - Clickable, navigates to Home */}
+          {/* Logo - ቕኔ (Qine) + QineGuide - Clickable, navigates to Home */}
           <Link 
             to="/" 
             className="flex h-20 items-center gap-3 px-6 hover:bg-surface-50 transition-colors"
             aria-label="QineGuide Home"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-lg shadow-button">
-              Q
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-xl shadow-button">
+              ቕኔ
             </div>
             <div>
               <span className="text-xl font-bold text-text-primary">QineGuide</span>
@@ -89,12 +113,8 @@ const Layout = () => {
             ))}
           </nav>
 
-          {/* User Section - Warm and Personal */}
-          <div className="p-4 space-y-4">
-            {/* Language Selector - New Pill Design */}
-            <LanguagePillSelector variant="sidebar" />
-            
-            {/* User Profile Card */}
+          {/* User Section - Profile Card Only (Language & Logout moved to header) */}
+          <div className="p-4">
             <div className="bg-gradient-to-br from-surface-50 to-surface-100 rounded-2xl p-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary-400 to-primary-600 text-white font-semibold text-lg shadow-soft">
@@ -107,13 +127,6 @@ const Layout = () => {
                   <p className="text-xs text-text-muted truncate">{user?.email}</p>
                 </div>
               </div>
-              <button
-                onClick={handleLogout}
-                className="mt-4 flex w-full items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-text-secondary hover:text-red-600 hover:bg-red-50 transition-all duration-200"
-              >
-                <LogOut className="h-4 w-4" />
-                {t('nav.logout') || 'Sign out'}
-              </button>
             </div>
           </div>
         </div>
@@ -121,12 +134,12 @@ const Layout = () => {
 
       {/* Mobile Header - Clean and Simple */}
       <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between bg-white/90 backdrop-blur-lg border-b border-surface-200 px-4 md:hidden">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold shadow-button">
-            Q
+        <Link to="/" className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-lg shadow-button">
+            ቕኔ
           </div>
           <span className="text-lg font-bold text-text-primary">QineGuide</span>
-        </div>
+        </Link>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -190,8 +203,8 @@ const Layout = () => {
         </div>
       )}
 
-      {/* Main Content - Clean and Spacious */}
-      <main className="min-h-screen pt-16 md:ml-72 md:pt-0">
+      {/* Main Content - Clean and Spacious (adjusted for desktop header) */}
+      <main className="min-h-screen pt-16 md:ml-72 md:pt-16">
         <div className="mx-auto max-w-4xl p-4 md:p-8 animate-fade-in">
           <Outlet />
         </div>
