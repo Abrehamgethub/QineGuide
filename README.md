@@ -1,9 +1,10 @@
 <div align="center">
+  
+  # ቅኔ QineGuide
+  
   <img src="frontend/public/favicon.svg" alt="QineGuide Logo" width="80" height="80">
   
-  # QineGuide
-  
-  ### *Where Understanding Meets Purpose, Guidance Becomes Possibility*
+  ### *Where Wisdom Guides — Understanding Meets Purpose*
   
   [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-qineguide--app.web.app-4A8EF0?style=for-the-badge)](https://qineguide-app.web.app)
   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
@@ -29,6 +30,7 @@ QineGuide is a comprehensive AI-powered educational platform designed specifical
 - **📱 Mobile-First**: Beautiful, responsive design that works on any device
 - **🎯 Career-Focused**: Tailored roadmaps for Ethiopian career opportunities
 - **🔒 Secure**: Firebase Authentication with Google Sign-In support
+- **✨ ቅኔ Branding**: Elegant Amharic identity across all pages
 
 ---
 
@@ -65,9 +67,11 @@ Find scholarships, internships, bootcamps, and educational programs:
 
 ### 👥 Mentor Network
 Connect with Ethiopian tech leaders and industry professionals:
-- Curated mentor profiles
-- LinkedIn integration
-- Filter by expertise and scope
+- Curated mentor profiles with real Ethiopian tech leaders
+- **Direct LinkedIn Search Integration** - Find mentors on LinkedIn instantly
+- Filter by expertise (AI, Software, Data Science, etc.)
+- Filter by scope (Local, International, Both)
+- Mentor application system for professionals
 
 ### 📊 Learning Analytics
 Track your progress with:
@@ -92,8 +96,19 @@ Full UI and content support for:
 
 **🌐 Production**: [https://qineguide-app.web.app](https://qineguide-app.web.app)
 
+### Key Pages
+| Page | Description |
+|------|-------------|
+| `/` | Landing page (logged out) / Dashboard (logged in) |
+| `/daily-coach` | Personalized daily learning tasks |
+| `/tutor` | AI chat with Amharic voice support |
+| `/career-goal` | Generate AI career roadmaps |
+| `/quiz` | Interactive knowledge quizzes |
+| `/mentors` | Ethiopian tech mentor network |
+| `/opportunities` | Jobs, scholarships, bootcamps |
+
 ### Demo Credentials
-You can sign up with your email or use Google Sign-In to explore all features.
+Sign up with email or use Google Sign-In to explore all features.
 
 ---
 
