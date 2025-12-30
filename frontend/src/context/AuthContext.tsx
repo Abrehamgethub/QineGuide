@@ -197,20 +197,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     getIdToken,
   };
 
-  // Show nothing while initializing to prevent flash
-  if (initializing) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-surface-50">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white font-bold text-xl animate-pulse">
-            Q
-          </div>
-          <p className="text-text-muted text-sm">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <AuthContext.Provider value={value}>
       {children}
